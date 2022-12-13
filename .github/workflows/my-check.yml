@@ -34,8 +34,13 @@ jobs:
           php-version: '8.1'
       - name: Copy .env
         run: php -r "file_exists('.env') || copy('.env.example', '.env');"
-      - name: Setup project
-        run: make setup-ci
-      - run: make lint
-      - run: make phpstan
-      - run: make test
+      - name: Generate key
+        run: php artisan key:gen --ansi
+      - name: Prepare database
+        run: php artisan migrate:fresh --seed
+      - name: Check linter
+        run: composer exec --verbose phpcs -- --standard=PSR12 app tests config
+      - name: Check phpstan
+        run: composer exec phpstan analyse
+      - name: Launch tests
+        run: php artisan test
