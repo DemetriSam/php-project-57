@@ -12,3 +12,5 @@ phpstan:
 	composer exec phpstan analyse
 test:
 	php artisan test
+start-db:
+	sudo service postgresql start
