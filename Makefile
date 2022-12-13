@@ -15,7 +15,7 @@ test:
 setup-ci:
 	env-prepare install key database-prepare
 env-prepare:
-	cp .env.example .env || true
+	php -r "file_exists('.env') || copy('.env.example', '.env');"
 key: 
 	php artisan key:gen --ansi
 database-prepare:
