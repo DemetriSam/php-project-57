@@ -34,7 +34,6 @@ jobs:
           php-version: '8.1'
       - name: Setup project
         run: make setup-ci
-      - run: make install
       - run: make lint
       - run: make phpstan
       - run: make test
