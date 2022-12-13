@@ -13,7 +13,7 @@ phpstan:
 test:
 	php artisan test
 setup-ci:
-	env-prepare install key database-prepare
+	install key database-prepare
 env-prepare:
 	php -r "file_exists('.env') || copy('.env.example', '.env');"
 key: 
