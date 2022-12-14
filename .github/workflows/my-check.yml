@@ -41,7 +41,7 @@ jobs:
       - name: Prepare database
         run: php artisan migrate:fresh --seed
       - name: Check linter
-        run: composer exec --verbose phpcs -- --standard=PSR12 app tests config
+        run: composer exec --verbose phpcs -- --standard=PSR12 app config routes
       - name: Check phpstan
         run: composer exec phpstan analyse
       - name: Launch tests
