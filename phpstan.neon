@@ -20,8 +20,11 @@ parameters:
     - ./app/Http/Middleware/TrustProxies.php
     - ./storage
     - cod/database
-    - ./database
+    - ./database`
     - ./server.php
+    - ./app/Http/Controllers/Auth/
+    - ./routes/
+    - ./tests/
 
   reportUnmatchedIgnoredErrors: false
   reportMaybesInPropertyPhpDocTypes: false

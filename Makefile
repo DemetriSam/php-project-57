@@ -5,9 +5,9 @@ install:
 validate:
 	composer validate
 lint:
-	composer exec --verbose phpcs -- --standard=PSR12 app tests config
+	composer exec --verbose phpcs -- --standard=PSR12 app config routes
 lint-fix:
-	composer exec --verbose phpcbf -- --standard=PSR12 app tests config
+	composer exec --verbose phpcbf -- --standard=PSR12 app config routes
 phpstan:
 	composer exec phpstan analyse
 test:
