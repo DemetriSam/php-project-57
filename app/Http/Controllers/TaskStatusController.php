@@ -23,9 +23,9 @@ class TaskStatusController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(TaskStatus $taskStatus)
     {
-        //
+        return view('task_status.create', compact('taskStatus'));
     }
 
     /**
@@ -36,7 +36,9 @@ class TaskStatusController extends Controller
      */
     public function store(StoreTaskStatusRequest $request)
     {
-        //
+        $formData = $request->all();
+        TaskStatus::create($formData);
+        return redirect()->route('task_statuses.index');
     }
 
     /**
@@ -70,7 +72,9 @@ class TaskStatusController extends Controller
      */
     public function update(UpdateTaskStatusRequest $request, TaskStatus $taskStatus)
     {
-        //
+        $formData = $request->all();
+        $taskStatus->fill($formData);
+        $taskStatus->save();
     }
 
     /**
@@ -81,6 +85,7 @@ class TaskStatusController extends Controller
      */
     public function destroy(TaskStatus $taskStatus)
     {
-        //
+        $taskStatus->delete();
+        return redirect()->route('task_statuses.index');
     }
 }

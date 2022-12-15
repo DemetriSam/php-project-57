@@ -10,26 +10,72 @@ use App\Models\User;
 
 class TaskStatusTest extends TestCase
 {
-    /** @test */
+
+    use RefreshDatabase;
+
     public function testIndex()
     {
-        for($i = 0; $i < 10; $i++) {
-            $taskStatuses[$i] = TaskStatus::factory()->make();       
+        $statusesOnPage = 3;
+        for($i = 0; $i < $statusesOnPage; $i++) {
+            $taskStatuses[$i] = TaskStatus::factory()->create();       
         }
 
         $response = $this->get('/task_statuses');
 
-        for($i = 0; $i < 10; $i++) {
+        for($i = 0; $i < $statusesOnPage; $i++) {
             $response->assertSee($taskStatuses[$i]->name);
         }
     }
 
     public function testShow()
     {
-        $taskStatus = TaskStatus::factory()->make();
+        $taskStatus = TaskStatus::factory()->create();
         $response = $this->get(implode('/', ['/task_statuses', $taskStatus->id]));
         $response->assertSee($taskStatus->name);
 
+    }
+
+    public function testCreate()
+    {
+        $taskStatus = TaskStatus::factory()->make();
+        $this->actingAs(User::factory()->make());
+
+        $response = $this->get('/task_statuses/create');
+
+        $response->assertStatus(200);
+        $response->assertSee('task_statuses');
+    }
+
+    public function testEdit()
+    {
+        $taskStatus = TaskStatus::factory()->create();
+        $url = implode('/', ['/taskStatuses', $taskStatus->id, 'edit']);
+        $response = $this->get($url);
+        $response->assertStatus(200);
+    }
+
+    public function testUpdate()
+    {
+        $taskStatus = TaskStatus::factory()->create();
+
+        $this->actingAs(User::factory()->make());
+        $updatedValue = implode(' ', ["Updated Title", rand()]);
+        $taskStatus->name = $updatedValue;
+        $url = implode('/', ['/task_statuses', $taskStatus->id]);
+        $this->patch($url, $taskStatus->toArray());
+        $this->assertDatabaseHas('task_statuses', ['id'=> $taskStatus->id , 'name' => $updatedValue]);
+    }
+
+    public function testDestroy()
+    {
+        $taskStatus = TaskStatus::factory()->create();
+
+        $this->assertDatabaseHas('task_statuses', ['id' => $taskStatus->id]);
+        $this->actingAs(User::factory()->make());
+        $url = implode('/', ['/task_statuses', $taskStatus->id]);
+
+        $this->delete($url);
+        $this->assertDatabaseMissing('task_statuses', ['id' => $taskStatus->id]);
     }
 
     public function testStore()
@@ -39,51 +85,9 @@ class TaskStatusTest extends TestCase
         $this->actingAs(User::factory()->make());
         
         $hadBeen = TaskStatus::all()->count();
-        $response = $this->post('/task_statuses/create', [
-            'name' => $taskStatus->name,
-        ]);
+        $response = $this->post('/task_statuses', $taskStatus->toArray());
         $became = TaskStatus::all()->count();
 
         $this->assertEquals($hadBeen + 1, $became);
     }
-
-    public function testCreate()
-    {
-        $response = $this->get('/task_statuses/create');
-
-        $response->assertStatus(200);
-    }
-
-    public function testEdit()
-    {
-        $taskStatus = TaskStatus::factory()->make();
-        $url = implode('/', ['/taskStatuses', $taskStatus->id, 'edit']);
-        $response = $this->get($url);
-        $response->assertStatus(200);
-    }
-
-    public function testUpdate()
-    {
-        $taskStatus = TaskStatus::factory()->make();
-
-        $this->actingAs(User::factory()->make());
-        $updatedValue = implode(' ', ["Updated Title", rand()]);
-        $taskStatus->name = $updatedValue;
-
-        $this->put(implode('/', ['/taskStatuses', $taskStatus->id, 'edit']), $taskStatus->toArray());
-
-        $this->assertDatabaseHas('task_statuses', ['id'=> $taskStatus->id , 'name' => $updatedValue]);
-    }
-
-    public function testDestroy()
-    {
-        $taskStatus = TaskStatus::factory()->make();
-        $this->assertDatabaseHas('task_statuses', ['id' => $taskStatus->id]);
-        $this->actingAs(User::factory()->make());
-        $url = implode('/', ['/task_statuses', $taskStatus->id]);
-
-        $this->delete($url);
-        $this->assertDatabaseMissing('task_statuses', ['id' => $taskStatus->id]);
-    }
-
 }
