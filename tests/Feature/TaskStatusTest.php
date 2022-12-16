@@ -49,7 +49,7 @@ class TaskStatusTest extends TestCase
     public function testEdit()
     {
         $taskStatus = TaskStatus::factory()->create();
-        $url = implode('/', ['/taskStatuses', $taskStatus->id, 'edit']);
+        $url = implode('/', ['/task_statuses', $taskStatus->id, 'edit']);
         $response = $this->get($url);
         $response->assertStatus(200);
     }

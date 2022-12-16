@@ -15,7 +15,7 @@ class TaskStatusController extends Controller
      */
     public function index()
     {
-        //
+        return view('task_status.index', ['taskStatuses' => TaskStatus::all()]);
     }
 
     /**
@@ -49,7 +49,7 @@ class TaskStatusController extends Controller
      */
     public function show(TaskStatus $taskStatus)
     {
-        //
+        return view('task_status.show', compact('taskStatus'));
     }
 
     /**
@@ -60,7 +60,7 @@ class TaskStatusController extends Controller
      */
     public function edit(TaskStatus $taskStatus)
     {
-        //
+        return view('task_status.edit', compact('taskStatus'));
     }
 
     /**
