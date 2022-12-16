@@ -49,16 +49,18 @@ class TaskStatusTest extends TestCase
     public function testEdit()
     {
         $taskStatus = TaskStatus::factory()->create();
+        $this->actingAs(User::factory()->create());
         $url = implode('/', ['/task_statuses', $taskStatus->id, 'edit']);
         $response = $this->get($url);
         $response->assertStatus(200);
+        $response->assertSee('task_statuses/' . $taskStatus->id);
     }
 
     public function testUpdate()
     {
         $taskStatus = TaskStatus::factory()->create();
 
-        $this->actingAs(User::factory()->make());
+        $this->actingAs(User::factory()->create());
         $updatedValue = implode(' ', ["Updated Title", rand()]);
         $taskStatus->name = $updatedValue;
         $url = implode('/', ['/task_statuses', $taskStatus->id]);
@@ -71,7 +73,7 @@ class TaskStatusTest extends TestCase
         $taskStatus = TaskStatus::factory()->create();
 
         $this->assertDatabaseHas('task_statuses', ['id' => $taskStatus->id]);
-        $this->actingAs(User::factory()->make());
+        $this->actingAs(User::factory()->create());
         $url = implode('/', ['/task_statuses', $taskStatus->id]);
 
         $this->delete($url);
@@ -82,12 +84,47 @@ class TaskStatusTest extends TestCase
     {        
         $taskStatus = TaskStatus::factory()->make();
 
-        $this->actingAs(User::factory()->make());
+        $this->actingAs(User::factory()->create());
         
         $hadBeen = TaskStatus::all()->count();
         $response = $this->post('/task_statuses', $taskStatus->toArray());
         $became = TaskStatus::all()->count();
 
         $this->assertEquals($hadBeen + 1, $became);
+    }
+
+    public function test_guest_can_not_store()
+    {
+        $taskStatus = TaskStatus::factory()->make();
+        $hadBeen = TaskStatus::all()->count();
+        $response = $this->post('/task_statuses', $taskStatus->toArray());
+        $became = TaskStatus::all()->count();
+
+        $this->assertEquals($hadBeen, $became);
+    }
+
+    public function test_guest_can_not_update()
+    {
+        $taskStatus = TaskStatus::factory()->create();
+        
+        $oldValue = $taskStatus->name;
+        $updatedValue = implode(' ', ["Updated Title", rand()]);
+        
+        $taskStatus->name = $updatedValue;
+        $url = implode('/', ['/task_statuses', $taskStatus->id]);
+        $this->patch($url, $taskStatus->toArray());
+        
+        $this->assertDatabaseHas('task_statuses', ['id'=> $taskStatus->id , 'name' => $oldValue]);
+    }
+
+    public function test_guest_can_not_delete()
+    {
+        $taskStatus = TaskStatus::factory()->create();
+
+        $this->assertDatabaseHas('task_statuses', ['id' => $taskStatus->id]);
+        $url = implode('/', ['/task_statuses', $taskStatus->id]);
+
+        $this->delete($url);
+        $this->assertDatabaseHas('task_statuses', ['id' => $taskStatus->id]);
     }
 }

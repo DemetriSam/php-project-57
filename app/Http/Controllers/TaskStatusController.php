@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreTaskStatusRequest;
 use App\Http\Requests\UpdateTaskStatusRequest;
 use App\Models\TaskStatus;
+use Illuminate\Support\Facades\Gate;
 
 class TaskStatusController extends Controller
 {
@@ -37,7 +38,9 @@ class TaskStatusController extends Controller
     public function store(StoreTaskStatusRequest $request)
     {
         $formData = $request->all();
+        // @phpstan-ignore-next-line
         TaskStatus::create($formData);
+        flash('Статус успешно создан');
         return redirect()->route('task_statuses.index');
     }
 
@@ -73,8 +76,13 @@ class TaskStatusController extends Controller
     public function update(UpdateTaskStatusRequest $request, TaskStatus $taskStatus)
     {
         $formData = $request->all();
-        $taskStatus->fill($formData);
+        // @phpstan-ignore-next-line
+        $oldId = $taskStatus->id;
+        // @phpstan-ignore-next-line
+        $taskStatus->name = $formData['name'];
         $taskStatus->save();
+        flash('Статус был изменен');
+        return redirect()->route('task_statuses.index');
     }
 
     /**
@@ -85,7 +93,14 @@ class TaskStatusController extends Controller
      */
     public function destroy(TaskStatus $taskStatus)
     {
-        $taskStatus->delete();
+
+        if (Gate::allows('do-things')) {
+            $taskStatus->delete();
+            flash('Статус был удален');
+        } else {
+            flash('Нет прав на удаление');
+        }
+
         return redirect()->route('task_statuses.index');
     }
 }

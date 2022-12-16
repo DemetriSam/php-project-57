@@ -14,3 +14,5 @@ test:
 	php artisan optimize:clear && php artisan test
 start-db:
 	sudo service postgresql start
+prepare-db:
+	php artisan migrate:fresh --seed
