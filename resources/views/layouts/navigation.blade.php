@@ -18,6 +18,9 @@
                     <x-nav-link :href="route('task_statuses.index')" :active="request()->routeIs('task_statuses.index')">
                         Статусы
                     </x-nav-link>
+                    <x-nav-link :href="route('tasks.index')" :active="request()->routeIs('tasks.index')">
+                        Задачи
+                    </x-nav-link>
                 </div>
             </div>
             @auth

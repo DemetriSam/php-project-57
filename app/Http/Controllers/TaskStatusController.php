@@ -93,8 +93,9 @@ class TaskStatusController extends Controller
      */
     public function destroy(TaskStatus $taskStatus)
     {
-
-        if (Gate::allows('do-things')) {
+        if ($taskStatus->tasks->isNotEmpty()) {
+            flash('Не удалось удалить статус');
+        } elseif (Gate::allows('do-things')) {
             $taskStatus->delete();
             flash('Статус был удален');
         } else {

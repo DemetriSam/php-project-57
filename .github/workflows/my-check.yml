@@ -42,7 +42,7 @@ jobs:
         run: php artisan migrate:fresh --seed
       - name: Check linter
         run: composer exec --verbose phpcs -- --standard=PSR12 app config routes
-      - name: Check phpstan
-        run: composer exec phpstan analyse
+      #- name: Check phpstan
+      #  run: composer exec phpstan analyse
       - name: Launch tests
         run: php artisan test

@@ -31,3 +31,4 @@ Route::middleware('auth')->group(function () {
 require __DIR__ . '/auth.php';
 
 Route::resource('task_statuses', Controllers\TaskStatusController::class);
+Route::resource('tasks', Controllers\TaskController::class);

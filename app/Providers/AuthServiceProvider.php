@@ -6,6 +6,7 @@ namespace App\Providers;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 use App\Models\User;
+use App\Models\Task;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -30,6 +31,10 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('do-things', function (User $user) {
             // @phpstan-ignore-next-line
             return $user->id ? true : false;
+        });
+        Gate::define('delete-task', function (User $user, Task $task) {
+            // @phpstan-ignore-next-line
+            return $user->id == $task->created_by_id;
         });
     }
 }
