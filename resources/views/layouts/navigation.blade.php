@@ -21,6 +21,9 @@
                     <x-nav-link :href="route('tasks.index')" :active="request()->routeIs('tasks.index')">
                         Задачи
                     </x-nav-link>
+                    <x-nav-link :href="route('labels.index')" :active="request()->routeIs('labels.index')">
+                        Метки
+                    </x-nav-link>
                 </div>
             </div>
             @auth
