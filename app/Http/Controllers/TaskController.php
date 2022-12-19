@@ -7,6 +7,9 @@ use App\Http\Requests\UpdateTaskRequest;
 use App\Models\Task;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Label;
+use App\Models\TaskStatus;
+use App\Models\User;
 
 class TaskController extends Controller
 {
@@ -27,7 +30,23 @@ class TaskController extends Controller
      */
     public function create(Task $task)
     {
-        return view('task.create', compact('task'));
+        $statuses = TaskStatus::all()
+            ->reduce(function($carry, $status) {
+                $carry[$status->id] = $status->name;
+                return $carry;
+            });
+        $labels = Label::all()
+            ->reduce(function($carry, $label) {
+                $carry[$label->id] = $label->name;
+                return $carry;
+            });
+        $execs = User::all()
+            ->reduce(function($carry, $user) {
+                $carry[$user->id] = $user->name;
+                return $carry;
+            });
+
+        return view('task.create', compact('task', 'labels', 'statuses', 'execs'));
     }
 
     /**
@@ -41,7 +60,10 @@ class TaskController extends Controller
         $formData = $request->all();
         // @phpstan-ignore-next-line
         $userId = Auth::user()->id;
-        Task::create(array_merge($formData, ['created_by_id' => $userId]));
+        $task = Task::create(array_merge($formData, ['created_by_id' => $userId]));
+        
+        $task->labels()->attach($formData['labels']);
+
         flash('Задача успешно создана');
         return redirect()->route('tasks.index');
     }
@@ -54,7 +76,8 @@ class TaskController extends Controller
      */
     public function show(Task $task)
     {
-        return view('task.show', compact('task'));
+        $labels = $task->labels;
+        return view('task.show', compact('task', 'labels'));
     }
 
     /**
@@ -65,7 +88,25 @@ class TaskController extends Controller
      */
     public function edit(Task $task)
     {
-        return view('task.edit', compact('task'));
+        $statuses = TaskStatus::all()
+            ->reduce(function($carry, $status) {
+                $carry[$status->id] = $status->name;
+                return $carry;
+            });
+
+        $labels = Label::all()
+            ->reduce(function($carry, $label) {
+                $carry[$label->id] = $label->name;
+                return $carry;
+            });
+
+        $execs = User::all()
+            ->reduce(function($carry, $user) {
+                $carry[$user->id] = $user->name;
+                return $carry;
+            });
+
+        return view('task.edit', compact('task', 'labels', 'statuses', 'execs'));
     }
 
     /**
@@ -80,13 +121,15 @@ class TaskController extends Controller
         $formData = $request->all();
 
         foreach ($formData as $key => $value) {
-            if (in_array($key, ['_method', '_token'])) {
+            if (in_array($key, ['_method', '_token', 'labels'])) {
                 continue;
             }
             $task->$key = $value;
         }
 
         $task->save();
+        $task->labels()->sync($formData['labels']);
+
         flash('Задача была изменена');
         return redirect()->route('tasks.index');
     }
