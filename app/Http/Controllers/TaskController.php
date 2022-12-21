@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Label;
 use App\Models\TaskStatus;
 use App\Models\User;
+use Spatie\QueryBuilder\QueryBuilder;
+use Spatie\QueryBuilder\AllowedFilter;
 
 class TaskController extends Controller
 {
@@ -20,7 +22,31 @@ class TaskController extends Controller
      */
     public function index()
     {
-        return view('task.index', ['tasks' => Task::all()]);
+        $tasks = QueryBuilder::for(Task::class)
+            ->allowedFilters([
+                AllowedFilter::exact('status_id'),
+                AllowedFilter::exact('created_by_id'),
+                AllowedFilter::exact('assigned_to_id'),
+            ])
+            ->get();
+
+        $statuses = TaskStatus::all()
+            ->reduce(function ($carry, $status) {
+                $carry[$status->id] = $status->name;
+                return $carry;
+            });
+        $execs = User::all()
+            ->reduce(function ($carry, $user) {
+                $carry[$user->id] = $user->name;
+                return $carry;
+            });
+        $creators = User::all()
+            ->reduce(function ($carry, $user) {
+                $carry[$user->id] = $user->name;
+                return $carry;
+            });
+
+        return view('task.index', compact('tasks', 'creators', 'statuses', 'execs'));
     }
 
     /**

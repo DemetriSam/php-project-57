@@ -6,8 +6,12 @@ return [
             'name' => 'Имя',
             'description' => 'Описание задачи',
             'status_id' => 'Статус задачи',
+            'created_by_id' => 'Автор',
             'assigned_to_id' => 'Исполнитель',
             'labels' => 'Метки',
+            'filter[status_id]' => 'Статус задачи',
+            'filter[created_by_id]' => 'Автор',
+            'filter[assigned_to_id]' => 'Исполнитель',
         ],
         'pages' => [
             'create' => [
@@ -25,6 +29,9 @@ return [
             'show' => [
                 'title' => 'Задача: ',
             ],
+            'filter' => [
+                'submit' => 'Принять'
+            ]
         ],
         'flash' => [
             'store' => 'Задача успешно создана',

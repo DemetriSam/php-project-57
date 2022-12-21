@@ -1,10 +1,14 @@
 @php
     $multiple = $multiple ?? false;
     $arrayName = $multiple ? $name . '[]' : $name;
+    $label = $label ?? true;
 @endphp
 <div>
-    <small>{{ Form::label($arrayName, __('views.' . $entity . '.fields.' . $name)) }}</small>
+    @if ($label)
+        <small>{{ Form::label($arrayName, __('views.' . $entity . '.fields.' . $name)) }}</small>
+    @endif
     {{ Form::select($arrayName, $items ?? [], null, [
+        'placeholder' => __('views.' . $entity . '.fields.' . $name),
         'multiple' => $multiple ?? false,
         'required' => $required ?? false,
         'autofocus' => $autofocus ?? false,
