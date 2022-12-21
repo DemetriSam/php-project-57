@@ -1,10 +1,7 @@
 <x-app-layout>
     <x-slot name="title">{{ __('views.status.pages.index.title') }}</x-slot>
     <x-slot name="header">
-        <div class="flex justify-between gap-x-4 content-baseline">
-            <h1 class="text-xl">{{ __('views.status.pages.index.title') }}</h1>
-        </div>
-
+        {{ __('views.status.pages.index.title') }}
     </x-slot>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

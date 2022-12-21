@@ -28,6 +28,16 @@ class Task extends Model
         return $this->belongsTo(TaskStatus::class, 'status_id');
     }
 
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'created_by_id');
+    }
+
+    public function executor()
+    {
+        return $this->belongsTo(User::class, 'assigned_to_id');
+    }
+
     public function labels()
     {
         return $this->belongsToMany(Label::class);

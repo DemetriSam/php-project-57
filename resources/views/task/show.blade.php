@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="title">{{ __('views.task.pages.show.title') }}{{ $task->name }}</x-slot>
     <x-slot name="header">
-        <h1>{{ __('views.task.pages.show.title') }}{{ $task->name }}</h1>
+        {{ __('views.task.pages.show.title') }}{{ $task->name }}
         @auth
             <a href="{{ route('tasks.edit', ['task' => $task->id]) }}"><small class="">(edit)</small></a>
         @endauth

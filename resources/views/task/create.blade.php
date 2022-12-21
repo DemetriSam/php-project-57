@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="title">{{ __('views.task.pages.create.title') }}</x-slot>
     <x-slot name="header">
-        <h1>{{ __('views.task.pages.create.title') }}</h1>
+        {{ __('views.task.pages.create.title') }}
     </x-slot>
     <x-form-card>
         {{ Form::model($task, ['route' => 'tasks.store']) }}

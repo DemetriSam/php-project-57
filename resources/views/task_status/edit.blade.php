@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="title">{{ __('views.status.pages.edit.title') }}</x-slot>
     <x-slot name="header">
-        <h1>{{ __('views.status.pages.edit.title') }}</h1>
+        {{ __('views.status.pages.edit.title') }}
         {{ Form::model($taskStatus, [
             'route' => ['task_statuses.update', $taskStatus->id],
             'method' => 'DELETE',

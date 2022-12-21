@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="title">{{ __('views.task.pages.edit.title') }}</x-slot>
     <x-slot name="header">
-        <h1>{{ __('views.task.pages.edit.title') }}</h1>
+        {{ __('views.task.pages.edit.title') }}
     </x-slot>
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <x-form-card>

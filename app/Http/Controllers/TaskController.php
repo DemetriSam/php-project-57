@@ -88,7 +88,10 @@ class TaskController extends Controller
         $userId = Auth::user()->id;
         $task = Task::create(array_merge($formData, ['created_by_id' => $userId]));
 
-        $task->labels()->attach($formData['labels']);
+        if (collect($formData)->has('labels')) {
+            $task->labels()->attach($formData['labels']);
+        }
+
 
         flash(__('views.task.flash.store'));
         return redirect()->route('tasks.index');
