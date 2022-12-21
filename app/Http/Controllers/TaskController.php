@@ -31,17 +31,17 @@ class TaskController extends Controller
     public function create(Task $task)
     {
         $statuses = TaskStatus::all()
-            ->reduce(function($carry, $status) {
+            ->reduce(function ($carry, $status) {
                 $carry[$status->id] = $status->name;
                 return $carry;
             });
         $labels = Label::all()
-            ->reduce(function($carry, $label) {
+            ->reduce(function ($carry, $label) {
                 $carry[$label->id] = $label->name;
                 return $carry;
             });
         $execs = User::all()
-            ->reduce(function($carry, $user) {
+            ->reduce(function ($carry, $user) {
                 $carry[$user->id] = $user->name;
                 return $carry;
             });
@@ -61,10 +61,10 @@ class TaskController extends Controller
         // @phpstan-ignore-next-line
         $userId = Auth::user()->id;
         $task = Task::create(array_merge($formData, ['created_by_id' => $userId]));
-        
+
         $task->labels()->attach($formData['labels']);
 
-        flash('Задача успешно создана');
+        flash(__('views.task.flash.store'));
         return redirect()->route('tasks.index');
     }
 
@@ -89,19 +89,19 @@ class TaskController extends Controller
     public function edit(Task $task)
     {
         $statuses = TaskStatus::all()
-            ->reduce(function($carry, $status) {
+            ->reduce(function ($carry, $status) {
                 $carry[$status->id] = $status->name;
                 return $carry;
             });
 
         $labels = Label::all()
-            ->reduce(function($carry, $label) {
+            ->reduce(function ($carry, $label) {
                 $carry[$label->id] = $label->name;
                 return $carry;
             });
 
         $execs = User::all()
-            ->reduce(function($carry, $user) {
+            ->reduce(function ($carry, $user) {
                 $carry[$user->id] = $user->name;
                 return $carry;
             });
@@ -130,7 +130,7 @@ class TaskController extends Controller
         $task->save();
         $task->labels()->sync($formData['labels']);
 
-        flash('Задача была изменена');
+        flash(__('views.task.flash.update'));
         return redirect()->route('tasks.index');
     }
 
@@ -144,9 +144,9 @@ class TaskController extends Controller
     {
         if (Gate::allows('delete-task', $task)) {
             $task->delete();
-            flash('Задача удалена');
+            flash(__('views.task.flash.destroy.success'));
         } else {
-            flash('Нет прав на удаление');
+            flash(__('views.task.flash.destroy.fail.no-rights'));
         }
 
         return redirect()->route('tasks.index');

@@ -4,7 +4,7 @@
 @endphp
 <div>
     <small>{{ Form::label($arrayName, __('views.' . $entity . '.fields.' . $name)) }}</small>
-    {{ Form::select($arrayName, $items, null, [
+    {{ Form::select($arrayName, $items ?? [], null, [
         'multiple' => $multiple ?? false,
         'required' => $required ?? false,
         'autofocus' => $autofocus ?? false,

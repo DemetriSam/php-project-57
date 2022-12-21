@@ -40,7 +40,7 @@ class LabelController extends Controller
     {
         $formData = $request->all();
         Label::create($formData);
-        flash('Метка успешно создана');
+        flash(__('views.label.flash.store'));
         return redirect()->route('labels.index');
     }
 
@@ -85,7 +85,7 @@ class LabelController extends Controller
         }
 
         $label->save();
-        flash('Метка была изменена');
+        flash(__('views.label.flash.update'));
         return redirect()->route('labels.index');
     }
 
@@ -97,11 +97,13 @@ class LabelController extends Controller
      */
     public function destroy(Label $label)
     {
-        if (Gate::allows('do-things')) {
+        if ($label->tasks->isNotEmpty()) {
+            flash(__('views.label.flash.destroy.fail.constraint'));
+        } elseif (Gate::allows('do-things')) {
             $label->delete();
-            flash('Метка удалена');
+            flash(__('views.label.flash.destroy.success'));
         } else {
-            flash('Нет прав на удаление');
+            flash(__('views.label.flash.destroy.fail.no-rights'));
         }
 
         return redirect()->route('labels.index');

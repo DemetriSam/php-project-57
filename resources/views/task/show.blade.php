@@ -1,7 +1,7 @@
 <x-app-layout>
-    <x-slot name="title">Задача: {{ $task->name }}</x-slot>
+    <x-slot name="title">{{ __('views.task.pages.show.title') }}{{ $task->name }}</x-slot>
     <x-slot name="header">
-        <h1>Задача: {{ $task->name }}</h1>
+        <h1>{{ __('views.task.pages.show.title') }}{{ $task->name }}</h1>
         @auth
             <a href="{{ route('tasks.edit', ['task' => $task->id]) }}"><small class="">(edit)</small></a>
         @endauth
@@ -11,7 +11,7 @@
             <p>{{ $task->description }}</p>
             <div class="flex gap-2 mt-2">
                 @foreach ($labels as $label)
-                    <div class="bg-gray-400 white-color text-white px-3 py-0.5 rounded">
+                    <div class="bg-gray-400 white-color text-white px-3 py-0.5 rounded font-semibold">
                         <small>{{ $label->name }}</small>
                     </div>
                 @endforeach

@@ -40,7 +40,7 @@ class TaskStatusController extends Controller
         $formData = $request->all();
         // @phpstan-ignore-next-line
         TaskStatus::create($formData);
-        flash('Статус успешно создан');
+        flash(__('views.status.flash.store'));
         return redirect()->route('task_statuses.index');
     }
 
@@ -81,7 +81,7 @@ class TaskStatusController extends Controller
         // @phpstan-ignore-next-line
         $taskStatus->name = $formData['name'];
         $taskStatus->save();
-        flash('Статус был изменен');
+        flash(__('views.status.flash.update'));
         return redirect()->route('task_statuses.index');
     }
 
@@ -94,12 +94,12 @@ class TaskStatusController extends Controller
     public function destroy(TaskStatus $taskStatus)
     {
         if ($taskStatus->tasks->isNotEmpty()) {
-            flash('Не удалось удалить статус');
+            flash(__('views.status.flash.destroy.fail.constraint'));
         } elseif (Gate::allows('do-things')) {
             $taskStatus->delete();
-            flash('Статус был удален');
+            flash(__('views.status.flash.destroy.success'));
         } else {
-            flash('Нет прав на удаление');
+            flash(__('views.status.flash.destroy.fail.no-rights'));
         }
 
         return redirect()->route('task_statuses.index');

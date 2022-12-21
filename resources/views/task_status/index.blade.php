@@ -1,8 +1,8 @@
 <x-app-layout>
-    <x-slot name="title">Статусы</x-slot>
+    <x-slot name="title">{{ __('views.status.pages.index.title') }}</x-slot>
     <x-slot name="header">
         <div class="flex justify-between gap-x-4 content-baseline">
-            <h1 class="text-xl">Статусы</h1>
+            <h1 class="text-xl">{{ __('views.status.pages.index.title') }}</h1>
         </div>
 
     </x-slot>
@@ -11,7 +11,7 @@
         <x-form-card>
             @auth
                 <x-primary-button>
-                    <a href="{{ route('task_statuses.create') }}">Создать новый статус</a>
+                    <a href="{{ route('task_statuses.create') }}">{{ __('views.status.pages.index.new') }}</a>
                 </x-primary-button>
             @endauth
             <div class="py-5">

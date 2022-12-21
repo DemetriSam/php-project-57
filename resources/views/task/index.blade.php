@@ -1,8 +1,8 @@
 <x-app-layout>
-    <x-slot name="title">Задачи</x-slot>
+    <x-slot name="title">{{ __('views.task.pages.index.title') }}</x-slot>
     <x-slot name="header">
         <div class="flex justify-between gap-x-4 content-baseline">
-            <h1 class="text-xl">Задачи</h1>
+            <h1 class="text-xl">{{ __('views.task.pages.index.title') }}</h1>
         </div>
 
     </x-slot>
@@ -11,7 +11,7 @@
         <x-form-card>
             @auth
                 <x-primary-button>
-                    <a href="{{ route('tasks.create') }}">Создать новую задачу</a>
+                    <a href="{{ route('tasks.create') }}">{{ __('views.task.pages.index.new') }}</a>
                 </x-primary-button>
             @endauth
             <div class="py-5">

@@ -1,7 +1,7 @@
 <x-app-layout>
-    <x-slot name="title">Метка: {{ $label->name }}</x-slot>
+    <x-slot name="title">{{ __('views.label.pages.show.title') }}{{ $label->name }}</x-slot>
     <x-slot name="header">
-        <h1>Метка: {{ $label->name }}</h1>
+        <h1>{{ __('views.label.pages.show.title') }}{{ $label->name }}</h1>
         @auth
             <a href="{{ route('labels.edit', ['label' => $label->id]) }}"><small class="">(edit)</small></a>
         @endauth

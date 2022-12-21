@@ -1,8 +1,8 @@
 <x-app-layout>
-    <x-slot name="title">Метки</x-slot>
+    <x-slot name="title">{{ __('views.label.pages.index.title') }}</x-slot>
     <x-slot name="header">
         <div class="flex justify-between gap-x-4 content-baseline">
-            <h1 class="text-xl">Метки</h1>
+            <h1 class="text-xl">{{ __('views.label.pages.index.title') }}</h1>
         </div>
 
     </x-slot>
@@ -11,7 +11,7 @@
         <x-form-card>
             @auth
                 <x-primary-button>
-                    <a href="{{ route('labels.create') }}">Создать новую метку</a>
+                    <a href="{{ route('labels.create') }}">{{ __('views.label.pages.index.new') }}</a>
                 </x-primary-button>
             @endauth
             <div class="py-5">
