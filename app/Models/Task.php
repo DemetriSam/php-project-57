@@ -23,6 +23,15 @@ class Task extends Model
         'status_id',
     ];
 
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'created_at' => 'datetime:d-m-Y',
+    ];
+
     public function status()
     {
         return $this->belongsTo(TaskStatus::class, 'status_id');

@@ -7,12 +7,11 @@
         {{ Form::model($label, [
             'route' => ['labels.update', $label->id],
             'method' => 'PATCH',
+            'class' => 'flex flex-col gap-3',
         ]) }}
-        <div>
-            <x-text-input-block entity="label" name="name" required autofocus />
-            <x-text-input-block entity="label" name="description" />
-            <x-submit entity="label" type="edit" />
-        </div>
+        <x-text-input-block entity="label" name="name" autofocus />
+        <x-text-input-block entity="label" name="description" />
+        <x-submit entity="label" type="edit" />
         {{ Form::close() }}
 
 

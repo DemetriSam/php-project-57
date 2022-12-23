@@ -53,7 +53,7 @@
                 </a>
 
                 <x-primary-button class="ml-4">
-                    {{ __('Register') }}
+                    {{ __('auth.register_button') }}
                 </x-primary-button>
             </div>
         </form>

@@ -25,7 +25,21 @@ class UpdateTaskRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'name' => ['required', 'unique:tasks'],
+            'status_id' => ['required'],
+            'assigned_to_id' => ['required'],
+        ];
+    }
+
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'name.unique' => 'Задача с таким именем уже существует',
         ];
     }
 }

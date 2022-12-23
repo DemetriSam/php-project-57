@@ -25,4 +25,5 @@
             'w-full',
         ],
     ]) }}
+    <x-input-error :messages="$errors->get($name)" class="" />
 </div>

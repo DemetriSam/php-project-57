@@ -15,7 +15,7 @@ use App\Http\Controllers;
 */
 
 Route::get('/', function () {
-    return view('index');
+    return view('dashboard');
 });
 
 Route::get('/dashboard', function () {

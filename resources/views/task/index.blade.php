@@ -11,7 +11,7 @@
                     <x-select-input-block entity="task" name="filter[status_id]" :items=$statuses label=0 />
                     <x-select-input-block entity="task" name="filter[created_by_id]" :items=$creators label=0 />
                     <x-select-input-block entity="task" name="filter[assigned_to_id]" :items=$execs label=0 />
-                    <x-submit entity="task" type="filter" />
+                    <x-submit entity="task" type="filter" class="flex flex-col justify-end" />
                 </div>
                 {{ Form::close() }}
                 @auth
@@ -49,7 +49,7 @@
                                     </td>
                                     <td>{{ $task->creator->name }}</td>
                                     <td>{{ $task->executor->name }}</td>
-                                    <td>{{ $task->created_at }}</td>
+                                    <td>{{ $task->toArray()['created_at'] }}</td>
                                     @auth
                                         <td>
                                             <a data-confirm="Вы уверены?" data-method="delete"

@@ -25,7 +25,19 @@ class StoreLabelRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'name' => ['required', 'unique:labels'],
+        ];
+    }
+
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'name.unique' => 'Метка с таким именем уже существует',
         ];
     }
 }

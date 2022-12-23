@@ -58,7 +58,7 @@
                                 <x-dropdown-link :href="route('logout')"
                                     onclick="event.preventDefault();
                                                 this.closest('form').submit();">
-                                    {{ __('views.logout') }}
+                                    {{ __('auth.logout') }}
                                 </x-dropdown-link>
                             </form>
                         </x-slot>
@@ -66,11 +66,12 @@
                 </div>
             @else
                 <div>
-                    <a href="{{ route('login') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Log in</a>
+                    <a href="{{ route('login') }}"
+                        class="text-sm text-gray-700 dark:text-gray-500 underline">{{ __('auth.login') }}</a>
 
                     @if (Route::has('register'))
                         <a href="{{ route('register') }}"
-                            class="ml-4 text-sm text-gray-700 dark:text-gray-500 underline">Register</a>
+                            class="ml-4 text-sm text-gray-700 dark:text-gray-500 underline">{{ __('auth.register') }}</a>
                     @endif
                 </div>
             @endauth
