@@ -16,7 +16,7 @@ return [
     'failed' => 'Введите правильные имя пользователя и пароль',
     'password' => 'Введите правильные имя пользователя и пароль',
     'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
-    'register' => 'Зарегистрироваться',
+    'register' => 'Зарегистрировать',
     'login' => 'Войти',
     'logout' => 'Выход',
     'register_button' => 'Зарегистрировать',
