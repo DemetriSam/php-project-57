@@ -16,7 +16,7 @@ use App\Http\Controllers;
 
 Route::get('/', function () {
     return view('dashboard');
-});
+})->name('index');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
