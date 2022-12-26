@@ -9,7 +9,6 @@
                         <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
                     </a>
                 </div>
-
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
@@ -69,7 +68,7 @@
                     <x-primary-button>
                         <a href="{{ route('login') }}" class="">{{ __('auth.login') }}</a>
                     </x-primary-button>
-                    @if (Route::has('register'))
+                    @if (Route::has('register') and !request()->routeIs('register'))
                         <x-primary-button>
                             <a href="{{ route('register') }}" class="">{{ __('auth.register') }}</a>
                         </x-primary-button>
