@@ -10,19 +10,18 @@ use App\Models\User;
 
 class TaskStatusTest extends TestCase
 {
-
     use RefreshDatabase;
 
     public function testIndex()
     {
         $statusesOnPage = 3;
-        for($i = 0; $i < $statusesOnPage; $i++) {
-            $taskStatuses[$i] = TaskStatus::factory()->create();       
+        for ($i = 0; $i < $statusesOnPage; $i++) {
+            $taskStatuses[$i] = TaskStatus::factory()->create();
         }
 
         $response = $this->get('/task_statuses');
 
-        for($i = 0; $i < $statusesOnPage; $i++) {
+        for ($i = 0; $i < $statusesOnPage; $i++) {
             $response->assertSee($taskStatuses[$i]->name);
         }
     }
@@ -32,7 +31,6 @@ class TaskStatusTest extends TestCase
         $taskStatus = TaskStatus::factory()->create();
         $response = $this->get(implode('/', ['/task_statuses', $taskStatus->id]));
         $response->assertSee($taskStatus->name);
-
     }
 
     public function testCreate()
@@ -65,7 +63,7 @@ class TaskStatusTest extends TestCase
         $taskStatus->name = $updatedValue;
         $url = implode('/', ['/task_statuses', $taskStatus->id]);
         $this->patch($url, $taskStatus->toArray());
-        $this->assertDatabaseHas('task_statuses', ['id'=> $taskStatus->id , 'name' => $updatedValue]);
+        $this->assertDatabaseHas('task_statuses', ['id' => $taskStatus->id , 'name' => $updatedValue]);
     }
 
     public function testDestroy()
@@ -81,11 +79,11 @@ class TaskStatusTest extends TestCase
     }
 
     public function testStore()
-    {        
+    {
         $taskStatus = TaskStatus::factory()->make();
 
         $this->actingAs(User::factory()->create());
-        
+
         $hadBeen = TaskStatus::all()->count();
         $response = $this->post('/task_statuses', $taskStatus->toArray());
         $became = TaskStatus::all()->count();
@@ -93,7 +91,7 @@ class TaskStatusTest extends TestCase
         $this->assertEquals($hadBeen + 1, $became);
     }
 
-    public function test_guest_can_not_store()
+    public function testGuestCanNotStore()
     {
         $taskStatus = TaskStatus::factory()->make();
         $hadBeen = TaskStatus::all()->count();
@@ -103,21 +101,21 @@ class TaskStatusTest extends TestCase
         $this->assertEquals($hadBeen, $became);
     }
 
-    public function test_guest_can_not_update()
+    public function testGuestCanNotUpdate()
     {
         $taskStatus = TaskStatus::factory()->create();
-        
+
         $oldValue = $taskStatus->name;
         $updatedValue = implode(' ', ["Updated Title", rand()]);
-        
+
         $taskStatus->name = $updatedValue;
         $url = implode('/', ['/task_statuses', $taskStatus->id]);
         $this->patch($url, $taskStatus->toArray());
-        
-        $this->assertDatabaseHas('task_statuses', ['id'=> $taskStatus->id , 'name' => $oldValue]);
+
+        $this->assertDatabaseHas('task_statuses', ['id' => $taskStatus->id , 'name' => $oldValue]);
     }
 
-    public function test_guest_can_not_delete()
+    public function testGuestCanNotDelete()
     {
         $taskStatus = TaskStatus::factory()->create();
 

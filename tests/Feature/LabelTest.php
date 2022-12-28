@@ -12,19 +12,18 @@ use App\Models\User;
 
 class LabelTest extends TestCase
 {
-
     use RefreshDatabase;
 
     public function testIndex()
     {
         $labelsOnPage = 3;
-        for($i = 0; $i < $labelsOnPage; $i++) {
-            $labels[$i] = Label::factory()->create();       
+        for ($i = 0; $i < $labelsOnPage; $i++) {
+            $labels[$i] = Label::factory()->create();
         }
 
         $response = $this->get('/labels');
 
-        for($i = 0; $i < $labelsOnPage; $i++) {
+        for ($i = 0; $i < $labelsOnPage; $i++) {
             $response->assertSee($labels[$i]->name);
         }
     }
@@ -34,7 +33,6 @@ class LabelTest extends TestCase
         $label = Label::factory()->create();
         $response = $this->get(implode('/', ['/labels', $label->id]));
         $response->assertSee($label->name);
-
     }
 
     public function testCreate()
@@ -62,17 +60,17 @@ class LabelTest extends TestCase
         $label = Label::factory()->create();
 
         $this->actingAs(User::factory()->create());
-        
+
         $updated = [
             'name' => implode(' ', ["Updated Name", rand()]),
             'description' => implode(' ', ["Updated Description", rand()]),
         ];
-        
+
         $url = implode('/', ['/labels', $label->id]);
         $this->patch($url, $updated);
-        
+
         $this->assertDatabaseHas('labels', [
-            'id'=> $label->id ,
+            'id' => $label->id ,
             'name' => $updated['name'],
             'description' => $updated['description'],
         ]);
@@ -90,11 +88,11 @@ class LabelTest extends TestCase
     }
 
     public function testStore()
-    {        
+    {
         $label = Label::factory()->make();
 
         $this->actingAs(User::factory()->create());
-        
+
         $hadBeen = Label::all()->count();
         $response = $this->post('/labels', $label->toArray());
         $became = Label::all()->count();
@@ -102,7 +100,7 @@ class LabelTest extends TestCase
         $this->assertEquals($hadBeen + 1, $became);
     }
 
-    public function test_guest_can_not_store()
+    public function testGuestCanNotStore()
     {
         $label = Label::factory()->make();
         $hadBeen = Label::all()->count();
@@ -112,21 +110,21 @@ class LabelTest extends TestCase
         $this->assertEquals($hadBeen, $became);
     }
 
-    public function test_guest_can_not_update()
+    public function testGuestCanNotUpdate()
     {
         $label = Label::factory()->create();
-        
+
         $oldValue = $label->name;
         $updatedValue = implode(' ', ["Updated Title", rand()]);
-        
+
         $label->name = $updatedValue;
         $url = implode('/', ['/labels', $label->id]);
         $this->patch($url, $label->toArray());
-        
-        $this->assertDatabaseHas('labels', ['id'=> $label->id , 'name' => $oldValue]);
+
+        $this->assertDatabaseHas('labels', ['id' => $label->id , 'name' => $oldValue]);
     }
 
-    public function test_guest_can_not_delete()
+    public function testGuestCanNotDelete()
     {
         $label = Label::factory()->create();
 
