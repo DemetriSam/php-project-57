@@ -18,7 +18,7 @@ return [
     'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
     'register' => 'Зарегистрироваться',
     'login' => 'Войти',
-    'logout' => 'Выйти',
+    'logout' => 'Выход',
     'register_button' => 'Зарегистрировать',
     
 
