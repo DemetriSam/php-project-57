@@ -52,10 +52,13 @@
                                     <td>{{ $task->toArray()['created_at'] }}</td>
                                     @auth
                                         <td>
-                                            <a data-confirm="Вы уверены?" data-method="delete"
-                                                class="text-red-600 hover:text-red-900"
-                                                href="{{ route('tasks.destroy', $task->id) }}">
-                                                Удалить </a>
+                                            @if (Auth::user()->name === $task->creator->name)
+                                                <a data-confirm="Вы уверены?" data-method="delete"
+                                                    class="text-red-600 hover:text-red-900"
+                                                    href="{{ route('tasks.destroy', $task->id) }}">
+                                                    Удалить </a>
+                                            @endif
+
                                             <a href="{{ route('tasks.edit', ['task' => $task->id]) }}">Изменить</a>
                                         </td>
                                     @endauth
