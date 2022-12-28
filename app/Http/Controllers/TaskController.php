@@ -157,7 +157,9 @@ class TaskController extends Controller
         }
 
         $task->save();
-        $task->labels()->sync($formData['labels']);
+        if (isset($formData['labels'])) {
+            $task->labels()->sync($formData['labels']);
+        }
 
         flash(__('views.task.flash.update'));
         return redirect()->route('tasks.index');
