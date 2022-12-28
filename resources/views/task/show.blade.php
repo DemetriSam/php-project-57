@@ -9,6 +9,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <x-form-card>
             <p>{{ $task->description }}</p>
+            <p>Статус: {{ $task->status->name }}</p>
             <div class="flex gap-2 mt-2">
                 @foreach ($labels as $label)
                     <div class="bg-gray-400 white-color text-white px-3 py-0.5 rounded font-semibold">
