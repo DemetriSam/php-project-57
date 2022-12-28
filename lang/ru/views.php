@@ -30,7 +30,7 @@ return [
                 'title' => 'Задача: ',
             ],
             'filter' => [
-                'submit' => 'Принять'
+                'submit' => 'Применить'
             ]
         ],
         'flash' => [
