@@ -37,9 +37,11 @@
                 </form>
             @else
                 <div class="flex align-center gap-2 py-3">
-                    <x-primary-button>
-                        <a href="{{ route('login') }}" class="">{{ __('auth.login') }}</a>
-                    </x-primary-button>
+                    @if (!request()->routeIs('login'))
+                        <x-primary-button>
+                            <a href="{{ route('login') }}" class="">{{ __('auth.login') }}</a>
+                        </x-primary-button>
+                    @endif
                     @if (Route::has('register') and !request()->routeIs('register'))
                         <x-primary-button>
                             <a href="{{ route('register') }}" class="">{{ __('auth.register') }}</a>
