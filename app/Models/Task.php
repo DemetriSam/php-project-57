@@ -29,7 +29,7 @@ class Task extends Model
      * @var array
      */
     protected $casts = [
-        'created_at' => 'datetime:d-m-Y',
+        'created_at' => 'datetime:d.m.Y',
     ];
 
     public function status()
