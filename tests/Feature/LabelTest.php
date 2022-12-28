@@ -17,6 +17,7 @@ class LabelTest extends TestCase
     public function testIndex()
     {
         $labelsOnPage = 3;
+        $labels = [];
         for ($i = 0; $i < $labelsOnPage; $i++) {
             $labels[$i] = Label::factory()->create();
         }
@@ -93,9 +94,9 @@ class LabelTest extends TestCase
 
         $this->actingAs(User::factory()->create());
 
-        $hadBeen = Label::all()->count();
+        $hadBeen = Label::count();
         $response = $this->post('/labels', $label->toArray());
-        $became = Label::all()->count();
+        $became = Label::count();
 
         $this->assertEquals($hadBeen + 1, $became);
     }
@@ -103,9 +104,9 @@ class LabelTest extends TestCase
     public function testGuestCanNotStore()
     {
         $label = Label::factory()->make();
-        $hadBeen = Label::all()->count();
+        $hadBeen = Label::count();
         $response = $this->post('/labels', $label->toArray());
-        $became = Label::all()->count();
+        $became = Label::count();
 
         $this->assertEquals($hadBeen, $became);
     }

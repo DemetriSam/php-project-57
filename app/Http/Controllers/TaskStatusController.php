@@ -93,6 +93,7 @@ class TaskStatusController extends Controller
      */
     public function destroy(TaskStatus $taskStatus)
     {
+        // @phpstan-ignore-next-line
         if ($taskStatus->tasks->isNotEmpty()) {
             flash(__('views.status.flash.destroy.fail.constraint'));
         } elseif (Gate::allows('do-things')) {

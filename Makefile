@@ -9,7 +9,7 @@ lint:
 lint-fix:
 	composer exec --verbose phpcbf -- --standard=PSR12 app config routes lang tests
 phpstan:
-	composer exec phpstan analyse
+	composer exec phpstan --ansi analyse
 test:
 	php artisan optimize:clear && php artisan test
 start-db:

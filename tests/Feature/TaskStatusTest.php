@@ -15,6 +15,7 @@ class TaskStatusTest extends TestCase
     public function testIndex()
     {
         $statusesOnPage = 3;
+        $taskStatuses = [];
         for ($i = 0; $i < $statusesOnPage; $i++) {
             $taskStatuses[$i] = TaskStatus::factory()->create();
         }
@@ -84,9 +85,9 @@ class TaskStatusTest extends TestCase
 
         $this->actingAs(User::factory()->create());
 
-        $hadBeen = TaskStatus::all()->count();
+        $hadBeen = TaskStatus::count();
         $response = $this->post('/task_statuses', $taskStatus->toArray());
-        $became = TaskStatus::all()->count();
+        $became = TaskStatus::count();
 
         $this->assertEquals($hadBeen + 1, $became);
     }
@@ -94,9 +95,9 @@ class TaskStatusTest extends TestCase
     public function testGuestCanNotStore()
     {
         $taskStatus = TaskStatus::factory()->make();
-        $hadBeen = TaskStatus::all()->count();
+        $hadBeen = TaskStatus::count();
         $response = $this->post('/task_statuses', $taskStatus->toArray());
-        $became = TaskStatus::all()->count();
+        $became = TaskStatus::count();
 
         $this->assertEquals($hadBeen, $became);
     }

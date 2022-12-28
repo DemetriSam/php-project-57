@@ -105,6 +105,7 @@ class TaskController extends Controller
      */
     public function show(Task $task)
     {
+        // @phpstan-ignore-next-line
         $labels = $task->labels;
         return view('task.show', compact('task', 'labels'));
     }
@@ -150,9 +151,10 @@ class TaskController extends Controller
         $formData = $request->all();
 
         foreach ($formData as $key => $value) {
-            if (in_array($key, ['_method', '_token', 'labels'])) {
+            if (in_array($key, ['_method', '_token', 'labels'], true)) {
                 continue;
             }
+            // @phpstan-ignore-next-line
             $task->$key = $value;
         }
 

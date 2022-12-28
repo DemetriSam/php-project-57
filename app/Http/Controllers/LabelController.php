@@ -78,9 +78,10 @@ class LabelController extends Controller
         $formData = $request->all();
 
         foreach ($formData as $key => $value) {
-            if (in_array($key, ['_method', '_token'])) {
+            if (in_array($key, ['_method', '_token'], true)) {
                 continue;
             }
+            // @phpstan-ignore-next-line
             $label->$key = $value;
         }
 
@@ -97,6 +98,7 @@ class LabelController extends Controller
      */
     public function destroy(Label $label)
     {
+        // @phpstan-ignore-next-line
         if ($label->tasks->isNotEmpty()) {
             flash(__('views.label.flash.destroy.fail.constraint'));
         } elseif (Gate::allows('do-things')) {
