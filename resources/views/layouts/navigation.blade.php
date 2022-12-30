@@ -12,16 +12,16 @@
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        Менеджер задач
+                        {{ __('views.title') }}
                     </x-nav-link>
                     <x-nav-link :href="route('task_statuses.index')" :active="request()->routeIs('task_statuses.index')">
-                        Статусы
+                        {{ __('views.status.pages.index.title') }}
                     </x-nav-link>
                     <x-nav-link :href="route('tasks.index')" :active="request()->routeIs('tasks.index')">
-                        Задачи
+                        {{ __('views.task.pages.index.title') }}
                     </x-nav-link>
                     <x-nav-link :href="route('labels.index')" :active="request()->routeIs('labels.index')">
-                        Метки
+                        {{ __('views.label.pages.index.title') }}
                     </x-nav-link>
                 </div>
             </div>
@@ -38,14 +38,18 @@
             @else
                 <div class="flex align-center gap-2 py-3">
                     @if (!request()->routeIs('login'))
-                        <x-primary-button>
-                            <a href="{{ route('login') }}" class="">{{ __('auth.login') }}</a>
-                        </x-primary-button>
+                        <a href="{{ route('login') }}" class="">
+                            <x-primary-button>
+                                {{ __('auth.login') }}
+                            </x-primary-button>
+                        </a>
                     @endif
                     @if (Route::has('register') and !request()->routeIs('register'))
-                        <x-primary-button>
-                            <a href="{{ route('register') }}" class="">{{ __('auth.register') }}</a>
-                        </x-primary-button>
+                        <a href="{{ route('register') }}" class="">
+                            <x-primary-button>
+                                {{ __('auth.register') }}
+                            </x-primary-button>
+                        </a>
                     @endif
                 </div>
             @endauth
@@ -70,7 +74,7 @@
     <div :class="{ 'block': open, 'hidden': !open }" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                {{ __('Dashboard') }}
+                {{ __('views.title') }}
             </x-responsive-nav-link>
         </div>
         @auth

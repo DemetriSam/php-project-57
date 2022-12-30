@@ -15,9 +15,11 @@
                 </div>
                 {{ Form::close() }}
                 @auth
-                    <x-primary-button>
-                        <a href="{{ route('tasks.create') }}">{{ __('views.task.pages.index.new') }}</a>
-                    </x-primary-button>
+                    <a href="{{ route('tasks.create') }}">
+                        <x-primary-button>
+                            {{ __('views.task.pages.index.new') }}
+                        </x-primary-button>
+                    </a>
                 @endauth
             </div>
             <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
@@ -25,14 +27,14 @@
                     <table class="w-full">
                         <thead class="border-b-2 border-solid border-black text-left">
                             <tr>
-                                <th>ID</th>
-                                <th>Статус</th>
-                                <th>Имя</th>
-                                <th>Автор</th>
-                                <th>Исполнитель</th>
-                                <th>Дата создания</th>
+                                <th>{{ __('views.task.fields.id') }}</th>
+                                <th>{{ __('views.task.fields.status_id') }}</th>
+                                <th>{{ __('views.task.fields.name') }}</th>
+                                <th>{{ __('views.task.fields.created_by_id') }}</th>
+                                <th>{{ __('views.task.fields.assigned_to_id') }}</th>
+                                <th>{{ __('views.task.fields.created_at') }}</th>
                                 @auth
-                                    <th>Действия</th>
+                                    <th>{{ __('views.actions.column_name') }}</th>
                                 @endauth
                             </tr>
                         </thead>
@@ -56,10 +58,11 @@
                                                 <a data-confirm="Вы уверены?" data-method="delete"
                                                     class="text-red-600 hover:text-red-900"
                                                     href="{{ route('tasks.destroy', $task->id) }}">
-                                                    Удалить </a>
+                                                    {{ __('views.actions.delete') }} </a>
                                             @endif
 
-                                            <a href="{{ route('tasks.edit', ['task' => $task->id]) }}">Изменить</a>
+                                            <a
+                                                href="{{ route('tasks.edit', ['task' => $task->id]) }}">{{ __('views.actions.edit') }}</a>
                                         </td>
                                     @endauth
 

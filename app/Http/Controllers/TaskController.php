@@ -30,21 +30,9 @@ class TaskController extends Controller
             ])
             ->get();
 
-        $statuses = TaskStatus::all()
-            ->reduce(function ($carry, $status) {
-                $carry[$status->id] = $status->name;
-                return $carry;
-            });
-        $execs = User::all()
-            ->reduce(function ($carry, $user) {
-                $carry[$user->id] = $user->name;
-                return $carry;
-            });
-        $creators = User::all()
-            ->reduce(function ($carry, $user) {
-                $carry[$user->id] = $user->name;
-                return $carry;
-            });
+        $statuses = TaskStatus::all()->pluck('name', 'id');
+        $execs = User::all()->pluck('name', 'id');
+        $creators = User::all()->pluck('name', 'id');
 
         return view('task.index', compact('tasks', 'creators', 'statuses', 'execs'));
     }
@@ -56,21 +44,9 @@ class TaskController extends Controller
      */
     public function create(Task $task)
     {
-        $statuses = TaskStatus::all()
-            ->reduce(function ($carry, $status) {
-                $carry[$status->id] = $status->name;
-                return $carry;
-            });
-        $labels = Label::all()
-            ->reduce(function ($carry, $label) {
-                $carry[$label->id] = $label->name;
-                return $carry;
-            });
-        $execs = User::all()
-            ->reduce(function ($carry, $user) {
-                $carry[$user->id] = $user->name;
-                return $carry;
-            });
+        $statuses = TaskStatus::all()->pluck('name', 'id');
+        $labels = Label::all()->pluck('name', 'id');
+        $execs = User::all()->pluck('name', 'id');
 
         return view('task.create', compact('task', 'labels', 'statuses', 'execs'));
     }
@@ -89,7 +65,9 @@ class TaskController extends Controller
         $task = Task::create(array_merge($formData, ['created_by_id' => $userId]));
 
         if (collect($formData)->has('labels')) {
-            $task->labels()->attach($formData['labels']);
+            $task->labels()->reject(function ($label) {
+                return empty($label);
+            })->attach($formData['labels']);
         }
 
 
@@ -118,23 +96,9 @@ class TaskController extends Controller
      */
     public function edit(Task $task)
     {
-        $statuses = TaskStatus::all()
-            ->reduce(function ($carry, $status) {
-                $carry[$status->id] = $status->name;
-                return $carry;
-            });
-
-        $labels = Label::all()
-            ->reduce(function ($carry, $label) {
-                $carry[$label->id] = $label->name;
-                return $carry;
-            });
-
-        $execs = User::all()
-            ->reduce(function ($carry, $user) {
-                $carry[$user->id] = $user->name;
-                return $carry;
-            });
+        $statuses = TaskStatus::all()->pluck('name', 'id');
+        $labels = Label::all()->pluck('name', 'id');
+        $execs = User::all()->pluck('name', 'id');
 
         return view('task.edit', compact('task', 'labels', 'statuses', 'execs'));
     }

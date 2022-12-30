@@ -1,15 +1,18 @@
 <?php
 
 return [
+    'title' => 'Менеджер задач',
     'task' => [
         'fields' => [
+            'id' => 'ID',
             'name' => 'Имя',
-            'description' => 'Описание задачи',
-            'status_id' => 'Статус задачи',
+            'description' => 'Описание',
+            'status_id' => 'Статус',
             'created_by_id' => 'Автор',
             'assigned_to_id' => 'Исполнитель',
+            'created_at' => 'Дата создания',
             'labels' => 'Метки',
-            'filter[status_id]' => 'Статус задачи',
+            'filter[status_id]' => 'Статус',
             'filter[created_by_id]' => 'Автор',
             'filter[assigned_to_id]' => 'Исполнитель',
         ],
@@ -46,8 +49,10 @@ return [
     ],
     'status' => [
         'fields' => [
+            'id' => 'ID',
             'name' => 'Имя',
             'description' => 'Описание статуса',
+            'created_at' => 'Дата создания',
         ],
         'pages' => [
             'create' => [
@@ -80,8 +85,10 @@ return [
     ],
     'label' => [
         'fields' => [
+            'id' => 'ID',
             'name' => 'Имя',
             'description' => 'Описание метки',
+            'created_at' => 'Дата создания',
         ],
         'pages' => [
             'create' => [
@@ -115,5 +122,11 @@ return [
 
     'delete' => 'Удалить',
     'greeting' => 'Привет от Хекслета!',
+    'actions' => [
+        'column_name' => 'Действия',
+        'edit' => 'Изменить',
+        'delete' => 'Удалить',
+        'confirmationi' => 'Вы уверены?',
+    ]
 
 ];

@@ -7,9 +7,11 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
             @auth
                 <div class="flex justify-center">
-                    <x-primary-button>
-                        <a href="{{ route('labels.create') }}">{{ __('views.label.pages.index.new') }}</a>
-                    </x-primary-button>
+                    <a href="{{ route('labels.create') }}">
+                        <x-primary-button>
+                            {{ __('views.label.pages.index.new') }}
+                        </x-primary-button>
+                    </a>
                 </div>
             @endauth
             <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
@@ -18,12 +20,11 @@
                     <table class="w-full">
                         <thead class="border-b-2 border-solid border-black text-left">
                             <tr>
-                                <th>ID</th>
-                                <th>Имя</th>
-                                <th>Описание</th>
-                                <th>Дата создания</th>
+                                <th>{{ __('views.label.fields.id') }}</th>
+                                <th>{{ __('views.label.fields.name') }}</th>
+                                <th>{{ __('views.label.fields.created_at') }}</th>
                                 @auth
-                                    <th>Действия</th>
+                                    <th>{{ __('views.actions.column_name') }}</th>
                                 @endauth
                             </tr>
                         </thead>
@@ -41,11 +42,12 @@
                                     <td>{{ $label->created_at }}</td>
                                     @auth
                                         <td>
-                                            <a data-confirm="Вы уверены?" data-method="delete"
+                                            <a data-confirm="__('views.actions.confirmation')" data-method="delete"
                                                 class="text-red-600 hover:text-red-900"
                                                 href="{{ route('labels.destroy', $label->id) }}">
-                                                Удалить </a>
-                                            <a href="{{ route('labels.edit', ['label' => $label->id]) }}">Изменить</a>
+                                                {{ __('views.actions.delete') }} </a>
+                                            <a
+                                                href="{{ route('labels.edit', ['label' => $label->id]) }}">{{ __('views.actions.edit') }}</a>
                                         </td>
                                     @endauth
 
