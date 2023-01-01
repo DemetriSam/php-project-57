@@ -16,3 +16,7 @@ start-db:
 	sudo service postgresql start
 prepare-db:
 	php artisan migrate:fresh --seed
+env:
+	php -r "file_exists('.env') || copy('.env.example', '.env');"
+key:
+	php artisan key:gen --ansi

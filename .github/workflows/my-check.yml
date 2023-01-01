@@ -32,17 +32,9 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.1'
-      - name: Copy .env
-        run: php -r "file_exists('.env') || copy('.env.example', '.env');"
-      - name: Install dependencies
-        run: composer install
-      - name: Generate key
-        run: php artisan key:gen --ansi
-      - name: Prepare database
-        run: php artisan migrate:fresh --seed
-      - name: Check linter
-        run: composer exec --verbose phpcs -- --standard=PSR12 app config routes
-      #- name: Check phpstan
-      #  run: composer exec phpstan analyse
-      - name: Launch tests
-        run: php artisan test
+      - run: make env
+      - run: make install
+      - run: make key
+      - run: make prepare-db
+      - run: make lint
+      - run: make test

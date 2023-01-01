@@ -30,9 +30,9 @@ class TaskController extends Controller
             ])
             ->get();
 
-        $statuses = TaskStatus::all()->pluck('name', 'id');
-        $execs = User::all()->pluck('name', 'id');
-        $creators = User::all()->pluck('name', 'id');
+        $statuses = TaskStatus::pluck('name', 'id');
+        $execs = User::pluck('name', 'id');
+        $creators = User::pluck('name', 'id');
 
         return view('task.index', compact('tasks', 'creators', 'statuses', 'execs'));
     }
@@ -44,9 +44,9 @@ class TaskController extends Controller
      */
     public function create(Task $task)
     {
-        $statuses = TaskStatus::all()->pluck('name', 'id');
-        $labels = Label::all()->pluck('name', 'id');
-        $execs = User::all()->pluck('name', 'id');
+        $statuses = TaskStatus::pluck('name', 'id');
+        $labels = Label::pluck('name', 'id');
+        $execs = User::pluck('name', 'id');
 
         return view('task.create', compact('task', 'labels', 'statuses', 'execs'));
     }
@@ -60,14 +60,10 @@ class TaskController extends Controller
     public function store(StoreTaskRequest $request)
     {
         $formData = $request->all();
-        // @phpstan-ignore-next-line
-        $userId = Auth::user()->id;
-        $task = Task::create(array_merge($formData, ['created_by_id' => $userId]));
+        $task = Auth::user()->createdTasks()->create($formData);
 
         if (collect($formData)->has('labels')) {
-            $task->labels()->reject(function ($label) {
-                return empty($label);
-            })->attach($formData['labels']);
+            $task->labels()->whereNotNull('name')->attach($formData['labels']);
         }
 
 
@@ -96,9 +92,9 @@ class TaskController extends Controller
      */
     public function edit(Task $task)
     {
-        $statuses = TaskStatus::all()->pluck('name', 'id');
-        $labels = Label::all()->pluck('name', 'id');
-        $execs = User::all()->pluck('name', 'id');
+        $statuses = TaskStatus::pluck('name', 'id');
+        $labels = Label::pluck('name', 'id');
+        $execs = User::pluck('name', 'id');
 
         return view('task.edit', compact('task', 'labels', 'statuses', 'execs'));
     }
