@@ -67,5 +67,4 @@ class TaskStatusPolicy
     {
         return (bool)$user->id ? true : false;
     }
-
 }
