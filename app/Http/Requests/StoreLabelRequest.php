@@ -14,7 +14,7 @@ class StoreLabelRequest extends FormRequest
      */
     public function authorize()
     {
-        return Gate::allows('do-things');
+        return true;
     }
 
     /**
@@ -25,7 +25,8 @@ class StoreLabelRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required', 'unique:labels'],
+            'name' => ['required', 'unique:labels', 'string'],
+            'description' => ['nullable', 'string'],
         ];
     }
 

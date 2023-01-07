@@ -32,12 +32,13 @@ class TaskTest extends TestCase
     {
         $task = Task::factory()->create();
         $response = $this->get(implode('/', ['/tasks', $task->id]));
+        $response->assertStatus(200);
         $response->assertSee($task->name);
     }
 
     public function testCreate()
     {
-        $this->actingAs(User::factory()->make());
+        $this->actingAs(User::factory()->create());
 
         $response = $this->get('/tasks/create');
 

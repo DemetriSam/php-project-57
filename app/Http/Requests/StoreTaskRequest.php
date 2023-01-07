@@ -14,7 +14,7 @@ class StoreTaskRequest extends FormRequest
      */
     public function authorize()
     {
-        return Gate::allows('do-things');
+        return true;
     }
 
     /**
@@ -25,9 +25,10 @@ class StoreTaskRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required', 'unique:tasks'],
-            'status_id' => ['required'],
-            'assigned_to_id' => ['required'],
+            'name' => ['required', 'unique:tasks', 'string'],
+            'status_id' => ['required', 'exists:task_statuses,id'],
+            'description' => ['nullable', 'string'],
+            'assigned_to_id' => ['nullable', 'integer'],
         ];
     }
 

@@ -14,7 +14,7 @@ class UpdateTaskStatusRequest extends FormRequest
      */
     public function authorize()
     {
-        return Gate::allows('do-things');
+        return true;
     }
 
     /**
@@ -25,7 +25,7 @@ class UpdateTaskStatusRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required', 'unique:task_statuses'],
+            'name' => ['required', 'string'],
         ];
     }
 

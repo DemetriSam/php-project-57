@@ -32,9 +32,4 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.1'
-      - run: make env
-      - run: make install
-      - run: make key
-      - run: make prepare-db
-      - run: make lint
-      - run: make test
+      - run: make setup

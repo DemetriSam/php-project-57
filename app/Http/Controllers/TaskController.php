@@ -15,6 +15,10 @@ use Spatie\QueryBuilder\AllowedFilter;
 
 class TaskController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(Task::class);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -63,7 +67,9 @@ class TaskController extends Controller
         $task = Auth::user()->createdTasks()->create($formData);
 
         if (collect($formData)->has('labels')) {
-            $task->labels()->whereNotNull('name')->attach($formData['labels']);
+            $labels = collect($formData['labels'])
+                        ->filter(fn($label) => $label !== null);
+            $task->labels()->attach($labels);
         }
 
 
@@ -110,17 +116,17 @@ class TaskController extends Controller
     {
         $formData = $request->all();
 
-        foreach ($formData as $key => $value) {
-            if (in_array($key, ['_method', '_token', 'labels'], true)) {
-                continue;
-            }
-            // @phpstan-ignore-next-line
-            $task->$key = $value;
-        }
+        $task->name = $formData['name'];
+        $task->description = $formData['description'];
+        $task->status_id = $formData['status_id'];
+        $task->assigned_to_id = $formData['assigned_to_id'];
 
         $task->save();
+
         if (isset($formData['labels'])) {
-            $task->labels()->sync($formData['labels']);
+            $labels = collect($formData['labels'])
+                        ->filter(fn($label) => $label !== null);
+            $task->labels()->sync($labels);
         }
 
         flash(__('views.task.flash.update'));
@@ -135,12 +141,9 @@ class TaskController extends Controller
      */
     public function destroy(Task $task)
     {
-        if (Gate::allows('delete-task', $task)) {
-            $task->delete();
-            flash(__('views.task.flash.destroy.success'));
-        } else {
-            flash(__('views.task.flash.destroy.fail.no-rights'));
-        }
+
+        $task->delete();
+        flash(__('views.task.flash.destroy.success'));
 
         return redirect()->route('tasks.index');
     }

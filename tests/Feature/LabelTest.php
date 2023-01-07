@@ -23,6 +23,7 @@ class LabelTest extends TestCase
         }
 
         $response = $this->get('/labels');
+        $response->assertStatus(200);
 
         for ($i = 0; $i < $labelsOnPage; $i++) {
             $response->assertSee($labels[$i]->name);
@@ -31,14 +32,16 @@ class LabelTest extends TestCase
 
     public function testShow()
     {
+        $this->actingAs(User::factory()->create());
         $label = Label::factory()->create();
         $response = $this->get(implode('/', ['/labels', $label->id]));
+        $response->assertStatus(200);
         $response->assertSee($label->name);
     }
 
     public function testCreate()
     {
-        $this->actingAs(User::factory()->make());
+        $this->actingAs(User::factory()->create());
 
         $response = $this->get('/labels/create');
 
@@ -58,9 +61,8 @@ class LabelTest extends TestCase
 
     public function testUpdate()
     {
-        $label = Label::factory()->create();
-
         $this->actingAs(User::factory()->create());
+        $label = Label::factory()->create();
 
         $updated = [
             'name' => implode(' ', ["Updated Name", rand()]),
@@ -90,9 +92,8 @@ class LabelTest extends TestCase
 
     public function testStore()
     {
-        $label = Label::factory()->make();
-
         $this->actingAs(User::factory()->create());
+        $label = Label::factory()->make();
 
         $hadBeen = Label::count();
         $response = $this->post('/labels', $label->toArray());

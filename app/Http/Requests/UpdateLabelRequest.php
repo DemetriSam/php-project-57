@@ -14,7 +14,7 @@ class UpdateLabelRequest extends FormRequest
      */
     public function authorize()
     {
-        return Gate::allows('do-things');
+        return true;
     }
 
     /**
@@ -25,7 +25,8 @@ class UpdateLabelRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required', 'unique:labels'],
+            'name' => ['required', 'string'],
+            'description' => ['nullable', 'string'],
         ];
     }
 

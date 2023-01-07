@@ -36,8 +36,8 @@ class TaskStatusTest extends TestCase
 
     public function testCreate()
     {
+        $this->actingAs(User::factory()->create());
         $taskStatus = TaskStatus::factory()->make();
-        $this->actingAs(User::factory()->make());
 
         $response = $this->get('/task_statuses/create');
 
@@ -69,10 +69,11 @@ class TaskStatusTest extends TestCase
 
     public function testDestroy()
     {
+        $this->actingAs(User::factory()->create());
         $taskStatus = TaskStatus::factory()->create();
 
         $this->assertDatabaseHas('task_statuses', ['id' => $taskStatus->id]);
-        $this->actingAs(User::factory()->create());
+
         $url = implode('/', ['/task_statuses', $taskStatus->id]);
 
         $this->delete($url);

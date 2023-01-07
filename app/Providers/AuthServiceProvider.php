@@ -27,14 +27,5 @@ class AuthServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerPolicies();
-
-        Gate::define('do-things', function (User $user) {
-            // @phpstan-ignore-next-line
-            return $user->id ? true : false;
-        });
-        Gate::define('delete-task', function (User $user, Task $task) {
-            // @phpstan-ignore-next-line
-            return $user->id == $task->created_by_id;
-        });
     }
 }

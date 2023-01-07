@@ -22,6 +22,7 @@
                             <tr>
                                 <th>{{ __('views.label.fields.id') }}</th>
                                 <th>{{ __('views.label.fields.name') }}</th>
+                                <th>{{ __('views.label.fields.description') }}</th>
                                 <th>{{ __('views.label.fields.created_at') }}</th>
                                 @auth
                                     <th>{{ __('views.actions.column_name') }}</th>

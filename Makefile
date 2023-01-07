@@ -20,3 +20,5 @@ env:
 	php -r "file_exists('.env') || copy('.env.example', '.env');"
 key:
 	php artisan key:gen --ansi
+setup: 
+	env install key prepare-db lint test

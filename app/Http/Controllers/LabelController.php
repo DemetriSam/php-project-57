@@ -9,6 +9,10 @@ use Illuminate\Support\Facades\Gate;
 
 class LabelController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(Label::class);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -77,13 +81,8 @@ class LabelController extends Controller
     {
         $formData = $request->all();
 
-        foreach ($formData as $key => $value) {
-            if (in_array($key, ['_method', '_token'], true)) {
-                continue;
-            }
-            // @phpstan-ignore-next-line
-            $label->$key = $value;
-        }
+        $label->name = $formData['name'];
+        $label->description = $formData['description'];
 
         $label->save();
         flash(__('views.label.flash.update'));
@@ -101,13 +100,10 @@ class LabelController extends Controller
         // @phpstan-ignore-next-line
         if ($label->tasks->isNotEmpty()) {
             flash(__('views.label.flash.destroy.fail.constraint'));
-        } elseif (Gate::allows('do-things')) {
+        } else {
             $label->delete();
             flash(__('views.label.flash.destroy.success'));
-        } else {
-            flash(__('views.label.flash.destroy.fail.no-rights'));
         }
-
         return redirect()->route('labels.index');
     }
 }

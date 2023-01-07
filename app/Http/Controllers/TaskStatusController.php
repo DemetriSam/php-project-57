@@ -9,6 +9,10 @@ use Illuminate\Support\Facades\Gate;
 
 class TaskStatusController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(TaskStatus::class);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -96,11 +100,9 @@ class TaskStatusController extends Controller
         // @phpstan-ignore-next-line
         if ($taskStatus->tasks->isNotEmpty()) {
             flash(__('views.status.flash.destroy.fail.constraint'));
-        } elseif (Gate::allows('do-things')) {
+        } else {
             $taskStatus->delete();
             flash(__('views.status.flash.destroy.success'));
-        } else {
-            flash(__('views.status.flash.destroy.fail.no-rights'));
         }
 
         return redirect()->route('task_statuses.index');
