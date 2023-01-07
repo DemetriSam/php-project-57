@@ -22,3 +22,5 @@ key:
 	php artisan key:gen --ansi
 setup: 
 	env install key prepare-db lint test
+
+.PHONY: test

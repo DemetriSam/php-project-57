@@ -41,7 +41,7 @@ class LabelPolicy
      */
     public function create(User $user)
     {
-        return $user->id ? true : false;
+        return (bool)$user->id ? true : false;
     }
 
     /**
@@ -53,7 +53,7 @@ class LabelPolicy
      */
     public function update(User $user, Label $label)
     {
-        return $user->id ? true : false;
+        return (bool)$user->id ? true : false;
     }
 
     /**
@@ -65,30 +65,6 @@ class LabelPolicy
      */
     public function delete(User $user, Label $label)
     {
-        return $user->id ? true : false;
-    }
-
-    /**
-     * Determine whether the user can restore the model.
-     *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\Label  $label
-     * @return \Illuminate\Auth\Access\Response|bool
-     */
-    public function restore(User $user, Label $label)
-    {
-        //
-    }
-
-    /**
-     * Determine whether the user can permanently delete the model.
-     *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\Label  $label
-     * @return \Illuminate\Auth\Access\Response|bool
-     */
-    public function forceDelete(User $user, Label $label)
-    {
-        //
+        return (bool)$user->id ? true : false;
     }
 }

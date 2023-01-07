@@ -41,7 +41,7 @@ class TaskStatusPolicy
      */
     public function create(User $user)
     {
-        return $user->id ? true : false;
+        return (bool)$user->id ? true : false;
     }
 
     /**
@@ -53,7 +53,7 @@ class TaskStatusPolicy
      */
     public function update(User $user, TaskStatus $taskStatus)
     {
-        return $user->id ? true : false;
+        return (bool)$user->id ? true : false;
     }
 
     /**
@@ -65,7 +65,7 @@ class TaskStatusPolicy
      */
     public function delete(User $user, TaskStatus $taskStatus)
     {
-        return $user->id ? true : false;
+        return (bool)$user->id ? true : false;
     }
 
     /**
