@@ -11,7 +11,7 @@ lint-fix:
 phpstan:
 	composer exec phpstan --ansi analyse
 test:
-	php artisan optimize:clear && php artisan test
+	php artisan optimize:clear && php artisan test --testsuite=Feature
 start-db:
 	sudo service postgresql start
 prepare-db:

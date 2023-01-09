@@ -17,12 +17,9 @@ class LabelTest extends TestCase
     public function testIndex()
     {
         $labelsOnPage = 3;
-        $labels = [];
-        for ($i = 0; $i < $labelsOnPage; $i++) {
-            $labels[$i] = Label::factory()->create();
-        }
+        $labels = Label::factory()->count($labelsOnPage)->create();
 
-        $response = $this->get('/labels');
+        $response = $this->get(route('labels.index'));
         $response->assertStatus(200);
 
         for ($i = 0; $i < $labelsOnPage; $i++) {
@@ -34,7 +31,7 @@ class LabelTest extends TestCase
     {
         $this->actingAs(User::factory()->create());
         $label = Label::factory()->create();
-        $response = $this->get(implode('/', ['/labels', $label->id]));
+        $response = $this->get(route('labels.show', $label));
         $response->assertStatus(200);
         $response->assertSee($label->name);
     }
@@ -43,7 +40,7 @@ class LabelTest extends TestCase
     {
         $this->actingAs(User::factory()->create());
 
-        $response = $this->get('/labels/create');
+        $response = $this->get(route('labels.create'));
 
         $response->assertStatus(200);
         $response->assertSee('labels');
@@ -53,8 +50,7 @@ class LabelTest extends TestCase
     {
         $label = Label::factory()->create();
         $this->actingAs(User::factory()->create());
-        $url = implode('/', ['/labels', $label->id, 'edit']);
-        $response = $this->get($url);
+        $response = $this->get(route('labels.edit', $label));
         $response->assertStatus(200);
         $response->assertSee('labels/' . $label->id);
     }
@@ -63,20 +59,11 @@ class LabelTest extends TestCase
     {
         $this->actingAs(User::factory()->create());
         $label = Label::factory()->create();
-
-        $updated = [
-            'name' => implode(' ', ["Updated Name", rand()]),
-            'description' => implode(' ', ["Updated Description", rand()]),
-        ];
-
-        $url = implode('/', ['/labels', $label->id]);
-        $this->patch($url, $updated);
-
-        $this->assertDatabaseHas('labels', [
-            'id' => $label->id ,
-            'name' => $updated['name'],
-            'description' => $updated['description'],
-        ]);
+        $data = $label->only(['name', 'description']);
+        $response = $this
+            ->patch(route('labels.update', $label), $data);
+        $response->assertRedirect();
+        $this->assertDatabaseHas('labels', $data);
     }
 
     public function testDestroy()
@@ -84,9 +71,8 @@ class LabelTest extends TestCase
         $label = Label::factory()->create();
         $this->actingAs(User::factory()->create());
         $this->assertDatabaseHas('labels', ['id' => $label->id]);
-        $url = implode('/', ['/labels', $label->id]);
-
-        $this->delete($url);
+        $response = $this->delete(route('labels.destroy', $label));
+        $response->assertRedirect();
         $this->assertDatabaseMissing('labels', ['id' => $label->id]);
     }
 
@@ -96,9 +82,10 @@ class LabelTest extends TestCase
         $label = Label::factory()->make();
 
         $hadBeen = Label::count();
-        $response = $this->post('/labels', $label->toArray());
+        $response = $this->post(route('labels.store'), $label->toArray());
         $became = Label::count();
 
+        $response->assertRedirect();
         $this->assertEquals($hadBeen + 1, $became);
     }
 
@@ -106,7 +93,7 @@ class LabelTest extends TestCase
     {
         $label = Label::factory()->make();
         $hadBeen = Label::count();
-        $response = $this->post('/labels', $label->toArray());
+        $response = $this->post(route('labels.store'), $label->toArray());
         $became = Label::count();
 
         $this->assertEquals($hadBeen, $became);
@@ -120,8 +107,7 @@ class LabelTest extends TestCase
         $updatedValue = implode(' ', ["Updated Title", rand()]);
 
         $label->name = $updatedValue;
-        $url = implode('/', ['/labels', $label->id]);
-        $this->patch($url, $label->toArray());
+        $this->patch(route('labels.update', $label), $label->toArray());
 
         $this->assertDatabaseHas('labels', ['id' => $label->id , 'name' => $oldValue]);
     }
@@ -129,11 +115,8 @@ class LabelTest extends TestCase
     public function testGuestCanNotDelete()
     {
         $label = Label::factory()->create();
-
         $this->assertDatabaseHas('labels', ['id' => $label->id]);
-        $url = implode('/', ['/labels', $label->id]);
-
-        $this->delete($url);
+        $this->delete(route('labels.destroy', $label));
         $this->assertDatabaseHas('labels', ['id' => $label->id]);
     }
 }

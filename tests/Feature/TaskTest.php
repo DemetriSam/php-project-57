@@ -16,12 +16,10 @@ class TaskTest extends TestCase
     public function testIndex()
     {
         $tasksOnPage = 3;
-        $tasks = [];
-        for ($i = 0; $i < $tasksOnPage; $i++) {
-            $tasks[$i] = Task::factory()->create();
-        }
+        $tasks = Task::factory()->count($tasksOnPage)->create();
 
-        $response = $this->get('/tasks');
+        $response = $this->get(route('tasks.index'));
+        $response->assertStatus(200);
 
         for ($i = 0; $i < $tasksOnPage; $i++) {
             $response->assertSee($tasks[$i]->name);
@@ -31,7 +29,7 @@ class TaskTest extends TestCase
     public function testShow()
     {
         $task = Task::factory()->create();
-        $response = $this->get(implode('/', ['/tasks', $task->id]));
+        $response = $this->get(route('tasks.show', $task));
         $response->assertStatus(200);
         $response->assertSee($task->name);
     }
@@ -40,7 +38,7 @@ class TaskTest extends TestCase
     {
         $this->actingAs(User::factory()->create());
 
-        $response = $this->get('/tasks/create');
+        $response = $this->get(route('tasks.create'));
 
         $response->assertStatus(200);
         $response->assertSee('tasks');
@@ -50,35 +48,20 @@ class TaskTest extends TestCase
     {
         $task = Task::factory()->create();
         $this->actingAs(User::factory()->create());
-        $url = implode('/', ['/tasks', $task->id, 'edit']);
-        $response = $this->get($url);
+        $response = $this->get(route('tasks.edit', $task));
         $response->assertStatus(200);
-        $response->assertSee('tasks/' . $task->id);
+        $response->assertSee(route('tasks.update', $task));
     }
 
     public function testUpdate()
     {
-        $task = Task::factory()->create();
-
         $this->actingAs(User::factory()->create());
-
-        $updated = [
-            'name' => implode(' ', ["Updated Name", rand()]),
-            'description' => implode(' ', ["Updated Description", rand()]),
-            'status_id' => TaskStatus::factory()->create()->id,
-            'assigned_to_id' => User::factory()->create()->id,
-        ];
-
-        $url = implode('/', ['/tasks', $task->id]);
-        $this->patch($url, $updated);
-
-        $this->assertDatabaseHas('tasks', [
-            'id' => $task->id ,
-            'name' => $updated['name'],
-            'description' => $updated['description'],
-            'status_id' => $updated['status_id'],
-            'assigned_to_id' => $updated['assigned_to_id'],
-        ]);
+        $task = Task::factory()->create();
+        $data = $task->only(['name', 'description', 'status_id', 'assigned_to_id']);
+        $response = $this
+            ->patch(route('tasks.update', $task), $data);
+        $response->assertRedirect();
+        $this->assertDatabaseHas('tasks', $data);
     }
 
     public function testDestroy()
@@ -87,9 +70,8 @@ class TaskTest extends TestCase
         $creator = User::find($task->created_by_id);
         $this->actingAs($creator);
         $this->assertDatabaseHas('tasks', ['id' => $task->id]);
-        $url = implode('/', ['/tasks', $task->id]);
-
-        $this->delete($url);
+        $response = $this->delete(route('tasks.destroy', $task));
+        $response->assertRedirect();
         $this->assertDatabaseMissing('tasks', ['id' => $task->id]);
     }
 
@@ -100,9 +82,10 @@ class TaskTest extends TestCase
         $this->actingAs(User::factory()->create());
 
         $hadBeen = Task::count();
-        $response = $this->post('/tasks', $task->toArray());
+        $response = $this->post(route('tasks.store'), $task->toArray());
         $became = Task::count();
 
+        $response->assertRedirect();
         $this->assertEquals($hadBeen + 1, $became);
     }
 
@@ -110,7 +93,7 @@ class TaskTest extends TestCase
     {
         $task = Task::factory()->make();
         $hadBeen = Task::count();
-        $response = $this->post('/tasks', $task->toArray());
+        $response = $this->post(route('tasks.store'), $task->toArray());
         $became = Task::count();
 
         $this->assertEquals($hadBeen, $became);
@@ -124,8 +107,7 @@ class TaskTest extends TestCase
         $updatedValue = implode(' ', ["Updated Title", rand()]);
 
         $task->name = $updatedValue;
-        $url = implode('/', ['/tasks', $task->id]);
-        $this->patch($url, $task->toArray());
+        $this->patch(route('tasks.update', $task), $task->toArray());
 
         $this->assertDatabaseHas('tasks', ['id' => $task->id , 'name' => $oldValue]);
     }
@@ -135,9 +117,8 @@ class TaskTest extends TestCase
         $task = Task::factory()->create();
 
         $this->assertDatabaseHas('tasks', ['id' => $task->id]);
-        $url = implode('/', ['/tasks', $task->id]);
 
-        $this->delete($url);
+        $this->delete(route('tasks.destroy', $task));
         $this->assertDatabaseHas('tasks', ['id' => $task->id]);
     }
 
@@ -148,9 +129,7 @@ class TaskTest extends TestCase
         $this->actingAs($notCreator);
 
         $this->assertDatabaseHas('tasks', ['id' => $task->id]);
-        $url = implode('/', ['/tasks', $task->id]);
-
-        $this->delete($url);
+        $this->delete(route('tasks.destroy', $task));
         $this->assertDatabaseHas('tasks', ['id' => $task->id]);
     }
 }
