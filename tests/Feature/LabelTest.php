@@ -23,6 +23,7 @@ class LabelTest extends TestCase
         $response->assertStatus(200);
 
         for ($i = 0; $i < $labelsOnPage; $i++) {
+            // @phpstan-ignore-next-line
             $response->assertSee($labels[$i]->name);
         }
     }

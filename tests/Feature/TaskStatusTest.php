@@ -21,6 +21,7 @@ class TaskStatusTest extends TestCase
         $response->assertStatus(200);
 
         for ($i = 0; $i < $statusesOnPage; $i++) {
+            // @phpstan-ignore-next-line
             $response->assertSee($taskStatuses[$i]->name);
         }
     }
