@@ -65,6 +65,7 @@ class TaskPolicy
      */
     public function delete(User $user, Task $task)
     {
+        // @phpstan-ignore-next-line
         return $task->creator->is($user);
     }
 }
