@@ -81,8 +81,7 @@ class LabelController extends Controller
     {
         $formData = $request->all();
 
-        $label->name = $formData['name'];
-        $label->description = $formData['description'];
+        $label->fill($formData);
 
         $label->save();
         flash(__('views.label.flash.update'));

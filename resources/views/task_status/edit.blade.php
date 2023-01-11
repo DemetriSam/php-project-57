@@ -17,7 +17,6 @@
             'class' => 'flex flex-col gap-3',
         ]) }}
         <x-text-input-block entity="status" name="name" required autofocus />
-        <x-text-input-block entity="status" name="description" />
         <x-submit entity="status" type="edit" />
         {{ Form::close() }}
     </x-form-card>

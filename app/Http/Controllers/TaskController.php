@@ -115,12 +115,7 @@ class TaskController extends Controller
     public function update(UpdateTaskRequest $request, Task $task)
     {
         $formData = $request->all();
-
-        $task->name = $formData['name'];
-        $task->description = $formData['description'];
-        $task->status_id = $formData['status_id'];
-        $task->assigned_to_id = $formData['assigned_to_id'];
-
+        $task->fill($formData);
         $task->save();
 
         if (isset($formData['labels'])) {

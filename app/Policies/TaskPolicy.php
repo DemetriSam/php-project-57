@@ -41,7 +41,7 @@ class TaskPolicy
      */
     public function create(User $user)
     {
-        return (bool)$user->id ? true : false;
+        return (bool)$user;
     }
 
     /**
@@ -53,7 +53,7 @@ class TaskPolicy
      */
     public function update(User $user, Task $task)
     {
-        return (bool)$user->id ? true : false;
+        return (bool)$user;
     }
 
     /**
@@ -65,6 +65,6 @@ class TaskPolicy
      */
     public function delete(User $user, Task $task)
     {
-        return $user->id == $task->created_by_id;
+        return $task->creator->is($user);
     }
 }

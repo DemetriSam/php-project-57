@@ -82,8 +82,7 @@ class TaskStatusController extends Controller
         $formData = $request->all();
         // @phpstan-ignore-next-line
         $oldId = $taskStatus->id;
-        // @phpstan-ignore-next-line
-        $taskStatus->name = $formData['name'];
+        $taskStatus->fill($formData);
         $taskStatus->save();
         flash(__('views.status.flash.update'));
         return redirect()->route('task_statuses.index');

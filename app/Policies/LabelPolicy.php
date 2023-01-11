@@ -41,7 +41,7 @@ class LabelPolicy
      */
     public function create(User $user)
     {
-        return (bool)$user->id ? true : false;
+        return (bool)$user;
     }
 
     /**
@@ -53,7 +53,7 @@ class LabelPolicy
      */
     public function update(User $user, Label $label)
     {
-        return (bool)$user->id ? true : false;
+        return (bool)$user;
     }
 
     /**
@@ -65,6 +65,6 @@ class LabelPolicy
      */
     public function delete(User $user, Label $label)
     {
-        return (bool)$user->id ? true : false;
+        return (bool)$user;
     }
 }
