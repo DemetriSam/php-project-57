@@ -22,12 +22,6 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [Controllers\ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [Controllers\ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [Controllers\ProfileController::class, 'destroy'])->name('profile.destroy');
-});
-
 require __DIR__ . '/auth.php';
 
 Route::resource('task_statuses', Controllers\TaskStatusController::class);
