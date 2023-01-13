@@ -28,7 +28,8 @@ class UpdateTaskRequest extends FormRequest
             'name' => ['required', 'string'],
             'status_id' => ['required', 'exists:task_statuses,id'],
             'description' => ['nullable', 'string'],
-            'assigned_to_id' => ['nullable', 'integer'],
+            'assigned_to_id' => ['required', 'integer'],
+            'labels' => ['nullable', 'array'],
         ];
     }
 
@@ -39,8 +40,6 @@ class UpdateTaskRequest extends FormRequest
      */
     public function messages()
     {
-        return [
-            'name.unique' => 'Задача с таким именем уже существует',
-        ];
+        return [];
     }
 }

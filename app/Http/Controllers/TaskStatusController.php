@@ -80,8 +80,6 @@ class TaskStatusController extends Controller
     public function update(UpdateTaskStatusRequest $request, TaskStatus $taskStatus)
     {
         $formData = $request->all();
-        // @phpstan-ignore-next-line
-        $oldId = $taskStatus->id;
         $taskStatus->fill($formData);
         $taskStatus->save();
         flash(__('views.status.flash.update'));
@@ -96,14 +94,13 @@ class TaskStatusController extends Controller
      */
     public function destroy(TaskStatus $taskStatus)
     {
-        // @phpstan-ignore-next-line
-        if ($taskStatus->tasks->isNotEmpty()) {
-            flash(__('views.status.flash.destroy.fail.constraint'));
-        } else {
-            $taskStatus->delete();
-            flash(__('views.status.flash.destroy.success'));
+        if ($taskStatus->tasks()->exists()) {
+            flash(__('views.status.flash.destroy.fail.constraint'))->error();
+            return back();
         }
 
+        $taskStatus->delete();
+        flash(__('views.status.flash.destroy.success'));
         return redirect()->route('task_statuses.index');
     }
 }

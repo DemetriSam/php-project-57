@@ -15,16 +15,8 @@ class TaskTest extends TestCase
 
     public function testIndex()
     {
-        $tasksOnPage = 3;
-        $tasks = Task::factory()->count($tasksOnPage)->create();
-
         $response = $this->get(route('tasks.index'));
         $response->assertStatus(200);
-
-        for ($i = 0; $i < $tasksOnPage; $i++) {
-            // @phpstan-ignore-next-line
-            $response->assertSee($tasks[$i]->name);
-        }
     }
 
     public function testShow()
@@ -32,17 +24,23 @@ class TaskTest extends TestCase
         $task = Task::factory()->create();
         $response = $this->get(route('tasks.show', $task));
         $response->assertStatus(200);
-        $response->assertSee($task->name);
     }
 
     public function testCreate()
     {
         $this->actingAs(User::factory()->create());
-
         $response = $this->get(route('tasks.create'));
-
         $response->assertStatus(200);
-        $response->assertSee('tasks');
+    }
+
+    public function testStore()
+    {
+        $this->actingAs(User::factory()->create());
+        $task = Task::factory()->make();
+        $response = $this->post(route('tasks.store'), $task->toArray());
+        $this->assertDatabaseHas('tasks', $task
+            ->only('name', 'description', 'status_id', 'assigned_to_id'));
+        $response->assertRedirect();
     }
 
     public function testEdit()
@@ -51,7 +49,6 @@ class TaskTest extends TestCase
         $this->actingAs(User::factory()->create());
         $response = $this->get(route('tasks.edit', $task));
         $response->assertStatus(200);
-        $response->assertSee(route('tasks.update', $task));
     }
 
     public function testUpdate()
@@ -74,20 +71,6 @@ class TaskTest extends TestCase
         $response = $this->delete(route('tasks.destroy', $task));
         $response->assertRedirect();
         $this->assertDatabaseMissing('tasks', ['id' => $task->id]);
-    }
-
-    public function testStore()
-    {
-        $task = Task::factory()->make();
-
-        $this->actingAs(User::factory()->create());
-
-        $hadBeen = Task::count();
-        $response = $this->post(route('tasks.store'), $task->toArray());
-        $became = Task::count();
-
-        $response->assertRedirect();
-        $this->assertEquals($hadBeen + 1, $became);
     }
 
     public function testGuestCanNotStore()

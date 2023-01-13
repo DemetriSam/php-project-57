@@ -66,11 +66,10 @@ class TaskController extends Controller
         $formData = $request->all();
         $task = Auth::user()->createdTasks()->create($formData);
 
-        if (collect($formData)->has('labels')) {
-            $labels = collect($formData['labels'])
-                        ->filter(fn($label) => $label !== null);
-            $task->labels()->attach($labels);
-        }
+
+        $labels = collect($request->input('labels'))
+                    ->filter(fn($label) => $label !== null);
+        $task->labels()->attach($labels);
 
 
         flash(__('views.task.flash.store'));
@@ -118,11 +117,10 @@ class TaskController extends Controller
         $task->fill($formData);
         $task->save();
 
-        if (isset($formData['labels'])) {
-            $labels = collect($formData['labels'])
-                        ->filter(fn($label) => $label !== null);
-            $task->labels()->sync($labels);
-        }
+
+        $labels = collect($request->input('labels'))
+                    ->filter(fn($label) => $label !== null);
+        $task->labels()->sync($labels);
 
         flash(__('views.task.flash.update'));
         return redirect()->route('tasks.index');

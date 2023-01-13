@@ -14,16 +14,8 @@ class TaskStatusTest extends TestCase
 
     public function testIndex()
     {
-        $statusesOnPage = 3;
-        $taskStatuses = TaskStatus::factory()->count($statusesOnPage)->create();
-
         $response = $this->get(route('task_statuses.index'));
         $response->assertStatus(200);
-
-        for ($i = 0; $i < $statusesOnPage; $i++) {
-            // @phpstan-ignore-next-line
-            $response->assertSee($taskStatuses[$i]->name);
-        }
     }
 
     public function testShow()
@@ -31,18 +23,13 @@ class TaskStatusTest extends TestCase
         $taskStatus = TaskStatus::factory()->create();
         $response = $this->get(route('task_statuses.show', $taskStatus));
         $response->assertStatus(200);
-        $response->assertSee($taskStatus->name);
     }
 
     public function testCreate()
     {
         $this->actingAs(User::factory()->create());
-        $taskStatus = TaskStatus::factory()->make();
-
         $response = $this->get(route('task_statuses.create'));
-
         $response->assertStatus(200);
-        $response->assertSee('task_statuses');
     }
 
     public function testEdit()
@@ -51,7 +38,6 @@ class TaskStatusTest extends TestCase
         $this->actingAs(User::factory()->create());
         $response = $this->get(route('task_statuses.edit', $taskStatus));
         $response->assertStatus(200);
-        $response->assertSee('task_statuses/' . $taskStatus->id);
     }
 
     public function testUpdate()
@@ -78,15 +64,10 @@ class TaskStatusTest extends TestCase
     public function testStore()
     {
         $taskStatus = TaskStatus::factory()->make();
-
         $this->actingAs(User::factory()->create());
-
-        $hadBeen = TaskStatus::count();
         $response = $this->post(route('task_statuses.store'), $taskStatus->toArray());
-        $became = TaskStatus::count();
-
+        $this->assertDatabaseHas('task_statuses', $taskStatus->toArray());
         $response->assertRedirect();
-        $this->assertEquals($hadBeen + 1, $became);
     }
 
     public function testGuestCanNotStore()

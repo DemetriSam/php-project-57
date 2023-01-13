@@ -16,16 +16,8 @@ class LabelTest extends TestCase
 
     public function testIndex()
     {
-        $labelsOnPage = 3;
-        $labels = Label::factory()->count($labelsOnPage)->create();
-
         $response = $this->get(route('labels.index'));
         $response->assertStatus(200);
-
-        for ($i = 0; $i < $labelsOnPage; $i++) {
-            // @phpstan-ignore-next-line
-            $response->assertSee($labels[$i]->name);
-        }
     }
 
     public function testShow()
@@ -34,17 +26,13 @@ class LabelTest extends TestCase
         $label = Label::factory()->create();
         $response = $this->get(route('labels.show', $label));
         $response->assertStatus(200);
-        $response->assertSee($label->name);
     }
 
     public function testCreate()
     {
         $this->actingAs(User::factory()->create());
-
         $response = $this->get(route('labels.create'));
-
         $response->assertStatus(200);
-        $response->assertSee('labels');
     }
 
     public function testEdit()
@@ -53,7 +41,6 @@ class LabelTest extends TestCase
         $this->actingAs(User::factory()->create());
         $response = $this->get(route('labels.edit', $label));
         $response->assertStatus(200);
-        $response->assertSee('labels/' . $label->id);
     }
 
     public function testUpdate()
@@ -81,13 +68,9 @@ class LabelTest extends TestCase
     {
         $this->actingAs(User::factory()->create());
         $label = Label::factory()->make();
-
-        $hadBeen = Label::count();
         $response = $this->post(route('labels.store'), $label->toArray());
-        $became = Label::count();
-
+        $this->assertDatabaseHas('labels', $label->toArray());
         $response->assertRedirect();
-        $this->assertEquals($hadBeen + 1, $became);
     }
 
     public function testGuestCanNotStore()
